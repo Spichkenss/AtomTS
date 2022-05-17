@@ -12,6 +12,8 @@ export const Palette = {
 		iconActive: '#0077ff',
 		button: '#0077ff',
 		buttonText: '#ffffff',
+		placeholder: '#8f99a0',
+		input: '#f3f4f6',
 	},
 
 	dark: {
@@ -24,5 +26,7 @@ export const Palette = {
 		iconActive: '#fcfcfc',
 		button: '#ffffff',
 		buttonText: '#000000',
+		placeholder: '#696a6e',
+		input: '#232323',
 	},
 }

@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+	Dimensions,
+	Pressable,
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
+} from 'react-native'
 import React, { FC, useState } from 'react'
 import {
 	LoginRequest,
@@ -18,54 +25,44 @@ const Login: FC<Props> = ({ navigation }) => {
 	const { theme, toggleTheme } = useTheme()
 
 	const [form, setForm] = useState<LoginRequest>({
-		email: 'test@mail.ru',
-		password: '12345',
+		email: '',
+		password: '',
 	})
 
 	const handleLogin = async () => {
 		await signIn(form).unwrap()
 	}
 
-	const changeTheme = () => {
-		toggleTheme()
-	}
-
 	return (
 		<AnimatedView style={styles(theme).container}>
-			<TextInput placeholder='Логин' />
-			<Pressable onPress={handleLogin}>
-				<Text
-					style={{
-						padding: 20,
-						backgroundColor: Palette[theme].button,
-						color: Palette[theme].buttonText,
-					}}
-				>
-					Login
+			<TextInput
+				placeholder='Логин'
+				placeholderTextColor={Palette[theme].placeholder}
+				style={styles(theme).input}
+				onChangeText={text => setForm({ ...form, email: text })}
+			/>
+			<TextInput
+				placeholder='Пароль'
+				placeholderTextColor={Palette[theme].placeholder}
+				style={styles(theme).input}
+				onChangeText={text => setForm({ ...form, password: text })}
+				secureTextEntry={true}
+			/>
+
+			<Pressable onPress={handleLogin} style={styles(theme).button}>
+				<Text style={{ color: Palette[theme].buttonText, fontSize: 18 }}>
+					Войти
 				</Text>
 			</Pressable>
 
 			<Pressable onPress={() => navigation.navigate('Registration')}>
 				<Text
 					style={{
-						padding: 20,
-						backgroundColor: Palette[theme].button,
-						color: Palette[theme].buttonText,
+						color: Palette[theme].secondary,
+						fontSize: 16,
 					}}
 				>
-					Registration
-				</Text>
-			</Pressable>
-
-			<Pressable onPress={changeTheme}>
-				<Text
-					style={{
-						padding: 20,
-						backgroundColor: Palette[theme].button,
-						color: Palette[theme].buttonText,
-					}}
-				>
-					Theme
+					Регистрация
 				</Text>
 			</Pressable>
 		</AnimatedView>
@@ -74,11 +71,30 @@ const Login: FC<Props> = ({ navigation }) => {
 
 export default Login
 
+const { width } = Dimensions.get('window')
+
 const styles = (theme: ThemeType) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
+			backgroundColor: Palette[theme].background,
+		},
+		input: {
+			width: width * 0.9,
+			padding: 10,
+			marginTop: 10,
+			backgroundColor: Palette[theme].input,
+			borderRadius: 10,
+		},
+		button: {
+			padding: 15,
+			margin: 20,
+			backgroundColor: Palette[theme].button,
+			borderRadius: 10,
+			width: width * 0.4,
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 	})

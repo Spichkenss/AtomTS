@@ -21,7 +21,7 @@ export interface RegistrationRequest {
 export const authApi = createApi({
 	reducerPath: 'userApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.1.4:5000/api',
+		baseUrl: 'http://192.168.65.150:5000/api',
 		prepareHeaders: (headers, { getState }) => {
 			const token = (getState() as RootState).userReducer.token
 			if (token) {

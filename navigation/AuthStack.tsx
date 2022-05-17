@@ -11,17 +11,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const AuthStack = () => {
 	return (
-		<Stack.Navigator screenOptions={{ animation: 'fade_from_bottom' }}>
-			<Stack.Screen
-				name='Login'
-				component={Login}
-				options={{ headerShown: false }}
-			/>
-			<Stack.Screen
-				name='Registration'
-				component={Registration}
-				options={{ title: 'Регистрация' }}
-			/>
+		<Stack.Navigator
+			screenOptions={{ animation: 'fade_from_bottom', headerShown: false }}
+		>
+			<Stack.Screen name='Login' component={Login} />
+			<Stack.Screen name='Registration' component={Registration} />
 		</Stack.Navigator>
 	)
 }
