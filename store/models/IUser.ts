@@ -1,7 +1,9 @@
 export interface IUser {
-	id?: number
-	username?: string
+	id: number
+	username: string
 	name?: string
 	surname?: string
-	email?: string
+	email: string
+	lastSeen: boolean
+	status: string
 }

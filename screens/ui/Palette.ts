@@ -1,6 +1,7 @@
 export const Palette = {
 	red: '#fa2f43',
 	pink: 'rgba(250,47,67,0.3)',
+	grey: 'rgba(180,180,180,0.2)',
 
 	light: {
 		text: '#000000',
@@ -14,6 +15,8 @@ export const Palette = {
 		buttonText: '#ffffff',
 		placeholder: '#8f99a0',
 		input: '#f3f4f6',
+		tabbar: '#f9f9f9',
+		carete: '#9ca3aa',
 	},
 
 	dark: {
@@ -28,5 +31,7 @@ export const Palette = {
 		buttonText: '#000000',
 		placeholder: '#696a6e',
 		input: '#232323',
+		tabbar: '#2c2d2f',
+		carete: '#304e72',
 	},
 }

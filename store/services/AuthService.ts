@@ -1,6 +1,8 @@
+import { userSlice } from './../reducers/UserSlice'
 import { IUser } from './../models/IUser'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { RootState } from '../store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export interface UserResponse {
 	user: IUser
@@ -19,11 +21,11 @@ export interface RegistrationRequest {
 }
 
 export const authApi = createApi({
-	reducerPath: 'userApi',
+	reducerPath: 'authApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.65.150:5000/api',
-		prepareHeaders: (headers, { getState }) => {
-			const token = (getState() as RootState).userReducer.token
+		baseUrl: 'http://192.168.1.4:5000/api',
+		prepareHeaders: async (headers, { getState }) => {
+			const token = await AsyncStorage.getItem('token')
 			if (token) {
 				headers.set('authorization', `Bearer ${token}`)
 			}
@@ -45,7 +47,13 @@ export const authApi = createApi({
 				body: data,
 			}),
 		}),
+		checkAuth: builder.mutation<UserResponse, void>({
+			query: () => ({
+				url: '/auth/check',
+			}),
+		}),
 	}),
 })
 
-export const { useSignInMutation, useSignUpMutation } = authApi
+export const { useSignInMutation, useSignUpMutation, useCheckAuthMutation } =
+	authApi

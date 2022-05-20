@@ -1,28 +1,31 @@
 import {
 	Dimensions,
-	Pressable,
 	StyleSheet,
 	Text,
 	TextInput,
-	View,
+	TouchableOpacity,
 } from 'react-native'
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import {
 	LoginRequest,
 	useSignInMutation,
 } from '../../store/services/AuthService'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../navigation/AuthStack'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from '../ui/Palette'
 import AnimatedView from '../ui/AnimatedView'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import {
+	NavigationProp,
+	ParamListBase,
+	useNavigation,
+} from '@react-navigation/native'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
+const Login: FC = () => {
+	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 
-const Login: FC<Props> = ({ navigation }) => {
 	const [signIn, { data }] = useSignInMutation()
-	const { theme, toggleTheme } = useTheme()
+	const { theme } = useTheme()
 
 	const [form, setForm] = useState<LoginRequest>({
 		email: '',
@@ -30,7 +33,9 @@ const Login: FC<Props> = ({ navigation }) => {
 	})
 
 	const handleLogin = async () => {
-		await signIn(form).unwrap()
+		await signIn(form)
+			.unwrap()
+			.then(async res => await AsyncStorage.setItem('token', res.token))
 	}
 
 	return (
@@ -49,22 +54,22 @@ const Login: FC<Props> = ({ navigation }) => {
 				secureTextEntry={true}
 			/>
 
-			<Pressable onPress={handleLogin} style={styles(theme).button}>
+			<TouchableOpacity onPress={handleLogin} style={styles(theme).button}>
 				<Text style={{ color: Palette[theme].buttonText, fontSize: 18 }}>
 					Войти
 				</Text>
-			</Pressable>
+			</TouchableOpacity>
 
-			<Pressable onPress={() => navigation.navigate('Registration')}>
+			<TouchableOpacity onPress={() => navigation.navigate('Registration')}>
 				<Text
 					style={{
 						color: Palette[theme].secondary,
 						fontSize: 16,
 					}}
 				>
-					Регистрация
+					Нет аккаута? Зарегистрируйтесь
 				</Text>
-			</Pressable>
+			</TouchableOpacity>
 		</AnimatedView>
 	)
 }
@@ -79,7 +84,6 @@ const styles = (theme: ThemeType) =>
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: Palette[theme].background,
 		},
 		input: {
 			width: width * 0.9,
@@ -87,6 +91,7 @@ const styles = (theme: ThemeType) =>
 			marginTop: 10,
 			backgroundColor: Palette[theme].input,
 			borderRadius: 10,
+			color: Palette[theme].text,
 		},
 		button: {
 			padding: 15,

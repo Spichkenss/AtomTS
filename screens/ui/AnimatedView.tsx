@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import Animated, {
 	interpolateColor,
 	useAnimatedStyle,
@@ -30,5 +29,3 @@ const AnimatedView: FC<any> = ({ style, children }) => {
 }
 
 export default AnimatedView
-
-const styles = StyleSheet.create({})

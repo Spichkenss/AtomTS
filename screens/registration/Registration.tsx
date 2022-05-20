@@ -1,12 +1,11 @@
 import {
 	Dimensions,
-	Pressable,
 	StyleSheet,
 	Text,
 	TextInput,
-	View,
+	TouchableOpacity,
 } from 'react-native'
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import {
 	RegistrationRequest,
 	useSignUpMutation,
@@ -14,12 +13,17 @@ import {
 import { Palette } from '../ui/Palette'
 import { ThemeType } from '../../store/models/ITheme'
 import { useTheme } from '../../hooks/useTheme'
-import { NativeStackScreenProps } from '@react-navigation/native-stack/lib/typescript/src/types'
-import { RootStackParamList } from '../../navigation/AuthStack'
+import AnimatedView from '../ui/AnimatedView'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import {
+	NavigationProp,
+	ParamListBase,
+	useNavigation,
+} from '@react-navigation/native'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Registration'>
+const Registration: FC = () => {
+	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 
-const Registration: FC<Props> = ({ navigation }) => {
 	const [signUp, { data }] = useSignUpMutation()
 	const { theme } = useTheme()
 
@@ -30,11 +34,13 @@ const Registration: FC<Props> = ({ navigation }) => {
 	})
 
 	const handleRegistration = async () => {
-		await signUp(form).unwrap()
+		await signUp(form)
+			.unwrap()
+			.then(async res => await AsyncStorage.setItem('token', res.token))
 	}
 
 	return (
-		<View style={styles(theme).container}>
+		<AnimatedView style={styles(theme).container}>
 			<TextInput
 				placeholder='Логин'
 				placeholderTextColor={Palette[theme].placeholder}
@@ -53,22 +59,25 @@ const Registration: FC<Props> = ({ navigation }) => {
 				style={styles(theme).input}
 				onChangeText={text => setForm({ ...form, username: text })}
 			/>
-			<Pressable onPress={handleRegistration} style={styles(theme).button}>
+			<TouchableOpacity
+				onPress={handleRegistration}
+				style={styles(theme).button}
+			>
 				<Text style={{ color: Palette[theme].buttonText, fontSize: 18 }}>
 					Отправить
 				</Text>
-			</Pressable>
-			<Pressable onPress={() => navigation.navigate('Login')}>
+			</TouchableOpacity>
+			<TouchableOpacity onPress={() => navigation.navigate('Login')}>
 				<Text
 					style={{
 						color: Palette[theme].secondary,
 						fontSize: 16,
 					}}
 				>
-					Авторизация
+					Уже есть аккаунт? Войдите
 				</Text>
-			</Pressable>
-		</View>
+			</TouchableOpacity>
+		</AnimatedView>
 	)
 }
 
@@ -82,7 +91,6 @@ const styles = (theme: ThemeType) =>
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: Palette[theme].background,
 		},
 		input: {
 			width: width * 0.9,
