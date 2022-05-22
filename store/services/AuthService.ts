@@ -23,7 +23,7 @@ export interface RegistrationRequest {
 export const authApi = createApi({
 	reducerPath: 'authApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.1.4:5000/api',
+		baseUrl: 'http://192.168.1.4:5000/api/auth',
 		prepareHeaders: async (headers, { getState }) => {
 			const token = await AsyncStorage.getItem('token')
 			if (token) {
@@ -35,21 +35,21 @@ export const authApi = createApi({
 	endpoints: builder => ({
 		signIn: builder.mutation<UserResponse, LoginRequest>({
 			query: (data: LoginRequest) => ({
-				url: '/auth/login',
+				url: '/login',
 				method: 'POST',
 				body: data,
 			}),
 		}),
 		signUp: builder.mutation<UserResponse, RegistrationRequest>({
 			query: (data: RegistrationRequest) => ({
-				url: '/auth/registration',
+				url: '/registration',
 				method: 'POST',
 				body: data,
 			}),
 		}),
 		checkAuth: builder.mutation<UserResponse, void>({
 			query: () => ({
-				url: '/auth/check',
+				url: '/check',
 			}),
 		}),
 	}),

@@ -4,12 +4,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import userReducer from './reducers/UserSlice'
 import themeReducer from './reducers/ThemeSlice'
+import { postApi } from './services/PostApi'
 
 const rootReducer = combineReducers({
 	themeReducer,
 	userReducer,
 	[userApi.reducerPath]: userApi.reducer,
 	[authApi.reducerPath]: authApi.reducer,
+	[postApi.reducerPath]: postApi.reducer,
 })
 
 export const setupStore = () => {
@@ -18,7 +20,8 @@ export const setupStore = () => {
 		middleware: getDefaultMiddleware =>
 			getDefaultMiddleware()
 				.concat(userApi.middleware)
-				.concat(authApi.middleware),
+				.concat(authApi.middleware)
+				.concat(postApi.middleware),
 	})
 }
 

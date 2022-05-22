@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from '../ui/Palette'
-import AddPostButton from './posts/AddPostButton'
+import PostList from './posts/PostList'
 
 const Home = () => {
 	const { theme } = useTheme()
+
 	return (
 		<View style={styles(theme).container}>
-			<AddPostButton />
+			<PostList />
 		</View>
 	)
 }

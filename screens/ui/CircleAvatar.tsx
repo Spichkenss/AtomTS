@@ -30,7 +30,7 @@ const styles = (theme: ThemeType, props: ICircleAvatar) =>
 		circle: {
 			justifyContent: 'center',
 			alignItems: 'center',
-			borderWidth: props.width <= 25 ? 1 : 2,
+			borderWidth: props.width <= 40 ? 1 : 2,
 			borderRadius: props.width / 2 + 5,
 			borderColor: Palette[theme].secondary,
 		},

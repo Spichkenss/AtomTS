@@ -3,7 +3,6 @@ import { useTheme } from '../hooks/useTheme'
 import Notifications from '../screens/home/notifications/Notifications'
 import AddPostPage from '../screens/home/posts/AddPostPage'
 import EditProfile from '../screens/profile/EditProfile'
-import Checkmark from '../screens/ui/Checkmark'
 import { Palette } from '../screens/ui/Palette'
 import TabNavigator from './TabNavigator'
 
@@ -48,10 +47,7 @@ const StackNavigator = () => {
 				name='AddPostPage'
 				component={AddPostPage}
 				options={{
-					title: 'Создать публикацию',
-					headerRight: () => {
-						return <Checkmark />
-					},
+					headerShown: false,
 				}}
 			/>
 		</Stack.Navigator>

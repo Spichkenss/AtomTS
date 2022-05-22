@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StatusBar, StyleSheet, Text } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import AnimatedView from './AnimatedView'
@@ -27,8 +27,7 @@ const styles = (theme: ThemeType) =>
 	StyleSheet.create({
 		container: {
 			backgroundColor: Palette[theme].primary,
-			paddingTop: 40,
-			paddingBottom: 10,
+			paddingVertical: 10,
 			paddingHorizontal: 15,
 			flexDirection: 'row',
 			alignItems: 'center',
