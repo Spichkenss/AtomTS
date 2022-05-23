@@ -4,48 +4,38 @@ import { AntDesign } from '@expo/vector-icons'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from './Palette'
 import { FC } from 'react'
-import { IPost } from '../../store/models/IPost'
-import {
-	LikeResponseQuery,
-	useGetLikesQuery,
-	useLikePostMutation,
-} from '../../store/services/PostApi'
-
-interface IPostItem {
-	postData: IPost
-}
+import { useLikePostMutation } from '../../store/services/PostApi'
+import { IPostItem } from '../home/posts/PostItem'
 
 const PostLikeButton: FC<IPostItem> = ({ postData }) => {
 	const { theme } = useTheme()
 	const [likePost] = useLikePostMutation()
-	const { data } = useGetLikesQuery(postData.id)
 
 	const likeRequest = async () => {
 		await likePost(postData.id)
 	}
-
 	return (
 		<TouchableOpacity
 			activeOpacity={0.4}
-			style={styles(theme, data).button}
+			style={styles(theme, post).button}
 			onPress={likeRequest}
 		>
 			<AntDesign
 				name='hearto'
 				size={20}
-				color={data?.my_like ? Palette.red : Palette[theme].iconInactive}
+				color={post?.my_like ? Palette.red : Palette[theme].iconInactive}
 			/>
-			<Text style={styles(theme, data).counter}>{postData.likes}</Text>
+			<Text style={styles(theme, post).counter}>{post?.likers.count}</Text>
 		</TouchableOpacity>
 	)
 }
 
 export default PostLikeButton
 
-const styles = (theme: ThemeType, data: LikeResponseQuery | undefined) =>
+const styles = (theme: ThemeType, post: LikersResponse | undefined) =>
 	StyleSheet.create({
 		button: {
-			backgroundColor: data?.my_like ? Palette.pink : Palette[theme].postButton,
+			backgroundColor: post?.my_like ? Palette.pink : Palette[theme].postButton,
 			paddingVertical: 5,
 			paddingHorizontal: 10,
 			borderRadius: 100,
@@ -55,6 +45,6 @@ const styles = (theme: ThemeType, data: LikeResponseQuery | undefined) =>
 		counter: {
 			marginLeft: 7,
 			fontSize: 16,
-			color: data?.my_like ? Palette.red : Palette[theme].iconInactive,
+			color: post?.my_like ? Palette.red : Palette[theme].iconInactive,
 		},
 	})

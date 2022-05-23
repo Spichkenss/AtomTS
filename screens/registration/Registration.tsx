@@ -98,6 +98,7 @@ const styles = (theme: ThemeType) =>
 			marginTop: 10,
 			backgroundColor: Palette[theme].input,
 			borderRadius: 10,
+			color: Palette[theme].text,
 		},
 		button: {
 			padding: 15,

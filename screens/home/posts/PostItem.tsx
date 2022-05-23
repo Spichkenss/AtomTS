@@ -3,7 +3,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '../../../hooks/useTheme'
 import { IPost } from '../../../store/models/IPost'
 import { ThemeType } from '../../../store/models/ITheme'
-import { useGetUserQuery } from '../../../store/services/UserService'
 import CircleAvatar from '../../ui/CircleAvatar'
 import { Palette } from '../../ui/Palette'
 import moment from 'moment'
@@ -14,17 +13,14 @@ import {
 	useNavigation,
 } from '@react-navigation/native'
 import PostLikeButton from '../../ui/PostLikeButton'
-import { IUser } from '../../../store/models/IUser'
 
-interface IPostItem {
+export interface IPostItem {
 	postData: IPost
 }
 
 const PostItem: FC<IPostItem> = ({ postData }) => {
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	const { theme } = useTheme()
-
-	console.log(postData)
 
 	return (
 		<View style={styles(theme).container}>

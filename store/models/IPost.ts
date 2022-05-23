@@ -5,7 +5,7 @@ export interface IPost {
 	description: string
 	media: string
 	timestamp: string
-	likes: number
-	comments: number
+	likes_counter: number
+	comments_counter: number
 	user: IUser
 }

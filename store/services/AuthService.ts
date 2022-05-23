@@ -23,7 +23,7 @@ export interface RegistrationRequest {
 export const authApi = createApi({
 	reducerPath: 'authApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.1.4:5000/api/auth',
+		baseUrl: 'http://192.168.23.150:5000/api/auth',
 		prepareHeaders: async (headers, { getState }) => {
 			const token = await AsyncStorage.getItem('token')
 			if (token) {
