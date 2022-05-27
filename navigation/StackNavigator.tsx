@@ -1,16 +1,20 @@
+import { NavigatorScreenParams, RouteProp } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useTheme } from '../hooks/useTheme'
+import Comments from '../screens/home/comments/Comments'
 import Notifications from '../screens/home/notifications/Notifications'
 import AddPostPage from '../screens/home/posts/AddPostPage'
 import EditProfile from '../screens/profile/EditProfile'
 import { Palette } from '../screens/ui/Palette'
-import TabNavigator from './TabNavigator'
+import { IPost } from '../store/models/IPost'
+import TabNavigator, { RootStackParamList } from './TabNavigator'
 
 export type AppStackProps = {
-	Tab: undefined
+	Tab: NavigatorScreenParams<RootStackParamList>
 	Notifications: undefined
 	EditProfile: undefined
-	AddPostPage: undefined
+	AddPostPage: { description: string; id: number } | undefined
+	Comments: { id: number }
 }
 
 const Stack = createNativeStackNavigator<AppStackProps>()
@@ -19,6 +23,7 @@ const StackNavigator = () => {
 	const { theme } = useTheme()
 	return (
 		<Stack.Navigator
+			initialRouteName='Tab'
 			screenOptions={{
 				animation: 'fade_from_bottom',
 				headerTintColor: Palette[theme].text,
@@ -46,6 +51,13 @@ const StackNavigator = () => {
 			<Stack.Screen
 				name='AddPostPage'
 				component={AddPostPage}
+				options={{
+					headerShown: false,
+				}}
+			/>
+			<Stack.Screen
+				name='Comments'
+				component={Comments}
 				options={{
 					headerShown: false,
 				}}

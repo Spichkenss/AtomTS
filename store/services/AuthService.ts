@@ -23,8 +23,8 @@ export interface RegistrationRequest {
 export const authApi = createApi({
 	reducerPath: 'authApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.23.150:5000/api/auth',
-		prepareHeaders: async (headers, { getState }) => {
+		baseUrl: 'http://192.168.1.4:5000/api/auth',
+		prepareHeaders: async headers => {
 			const token = await AsyncStorage.getItem('token')
 			if (token) {
 				headers.set('authorization', `Bearer ${token}`)
@@ -32,6 +32,7 @@ export const authApi = createApi({
 			return headers
 		},
 	}),
+	tagTypes: ['Auth'],
 	endpoints: builder => ({
 		signIn: builder.mutation<UserResponse, LoginRequest>({
 			query: (data: LoginRequest) => ({
@@ -39,6 +40,7 @@ export const authApi = createApi({
 				method: 'POST',
 				body: data,
 			}),
+			invalidatesTags: ['Auth'],
 		}),
 		signUp: builder.mutation<UserResponse, RegistrationRequest>({
 			query: (data: RegistrationRequest) => ({
@@ -46,11 +48,13 @@ export const authApi = createApi({
 				method: 'POST',
 				body: data,
 			}),
+			invalidatesTags: ['Auth'],
 		}),
 		checkAuth: builder.mutation<UserResponse, void>({
 			query: () => ({
 				url: '/check',
 			}),
+			invalidatesTags: ['Auth'],
 		}),
 	}),
 })

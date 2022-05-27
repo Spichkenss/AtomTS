@@ -1,37 +1,36 @@
-import { useState } from 'react'
-import { FlatList, View, ActivityIndicator } from 'react-native'
+import { useEffect } from 'react'
+import { FlatList, View } from 'react-native'
 import { useTheme } from '../../../hooks/useTheme'
 import { IPost } from '../../../store/models/IPost'
 import { useGetAllPostsQuery } from '../../../store/services/PostApi'
-import { Palette } from '../../ui/Palette'
+import Loader from '../../ui/Loader'
 import AddPostButton from './AddPostButton'
 import PostItem from './PostItem'
 
 const PostList = () => {
 	const { theme } = useTheme()
-	const { data, refetch, isFetching } = useGetAllPostsQuery()
+	const { data, refetch, isFetching } = useGetAllPostsQuery(undefined, {
+		refetchOnFocus: true,
+		refetchOnMountOrArgChange: true,
+		refetchOnReconnect: true,
+	})
 
-	const [isRefresh, setIsRefresh] = useState<boolean>(false)
-
-	const onRefresh = () => {
-		setIsRefresh(true)
-		refetch()
-		setIsRefresh(false)
-	}
+	useEffect(() => {
+		const getUpdates = async () => {
+			await refetch()
+		}
+		getUpdates()
+	}, [])
 
 	return isFetching ? (
-		<ActivityIndicator
-			size='large'
-			color={Palette[theme].secondary}
-			style={{ alignSelf: 'center', paddingTop: 50 }}
-		/>
+		<Loader />
 	) : (
 		<FlatList
-			refreshing={isRefresh}
-			onRefresh={onRefresh}
+			refreshing={isFetching}
+			onRefresh={refetch}
 			data={data}
 			renderItem={({ item }) => <PostItem postData={item} />}
-			keyExtractor={(item: IPost) => item.id.toString()}
+			keyExtractor={(item: IPost) => item?.id.toString()}
 			ItemSeparatorComponent={() => <View style={{ margin: 2.5 }}></View>}
 			ListHeaderComponent={
 				<>

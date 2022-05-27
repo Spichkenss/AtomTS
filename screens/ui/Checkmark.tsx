@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '../../hooks/useTheme'
 import { Palette } from './Palette'
 import { FC } from 'react'
+import { IPost } from '../../store/models/IPost'
 
 interface ICheck {
 	onPress: () => void
@@ -17,7 +18,9 @@ const Checkmark: FC<ICheck> = ({ onPress, disabled }) => {
 			<Ionicons
 				name='checkmark-sharp'
 				size={24}
-				color={disabled ? Palette[theme].iconInactive : Palette[theme].text}
+				color={
+					disabled ? Palette[theme].iconInactive : Palette[theme].iconActive
+				}
 			/>
 		</TouchableOpacity>
 	)

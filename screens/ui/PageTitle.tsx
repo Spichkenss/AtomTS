@@ -1,8 +1,9 @@
-import { FC, ReactNode } from 'react'
-import { StatusBar, StyleSheet, Text } from 'react-native'
+import React, { FC, ReactNode } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import AnimatedView from './AnimatedView'
+import BackArrow from './BackArrow'
 import { Palette } from './Palette'
 
 interface IPageTitle {
@@ -15,7 +16,10 @@ const PageTitle: FC<IPageTitle> = ({ children, title }) => {
 
 	return (
 		<AnimatedView style={styles(theme).container}>
-			<Text style={styles(theme).text}>{title}</Text>
+			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+				<BackArrow />
+				<Text style={styles(theme).text}>{title}</Text>
+			</View>
 			{children}
 		</AnimatedView>
 	)
@@ -37,5 +41,6 @@ const styles = (theme: ThemeType) =>
 			fontSize: 28,
 			fontWeight: '600',
 			color: Palette[theme].text,
+			paddingHorizontal: 10,
 		},
 	})

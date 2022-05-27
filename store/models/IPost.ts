@@ -4,8 +4,8 @@ export interface IPost {
 	authorId: number
 	description: string
 	media: string
-	timestamp: string
 	likes_counter: number
 	comments_counter: number
+	createdAt: Date
 	user: IUser
 }

@@ -3,42 +3,52 @@ import { useTheme } from '../../../hooks/useTheme'
 import { ThemeType } from '../../../store/models/ITheme'
 import { Palette } from '../../ui/Palette'
 import { Octicons } from '@expo/vector-icons'
-import { useCallback, useRef, useState } from 'react'
+import { FC, useCallback, useState } from 'react'
 import {
 	CreatePostRequest,
+	EditPostRequest,
 	useCreatePostMutation,
+	useEditPostMutation,
 } from '../../../store/services/PostApi'
 import PageTitle from '../../ui/PageTitle'
 import Checkmark from '../../ui/Checkmark'
-import { useNavigation } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { AppStackProps } from '../../../navigation/StackNavigator'
 
-const AddPostPage = () => {
-	const navigation = useNavigation()
+type Props = NativeStackScreenProps<AppStackProps, 'AddPostPage'>
+
+const AddPostPage: FC<Props> = ({ route, navigation }) => {
 	const { theme } = useTheme()
 	const [createPost] = useCreatePostMutation()
+	const [editPost] = useEditPostMutation()
 
-	const [postBody, setPostBody] = useState<CreatePostRequest>({
-		description: '',
-	})
+	const [postBody, setPostBody] = useState<CreatePostRequest | EditPostRequest>(
+		{
+			description: '',
+		}
+	)
 
 	const handleTyping = (text: string) => {
 		setPostBody({ ...postBody, description: text })
 	}
 
 	const handleCreate = useCallback(async () => {
-		createPost(postBody)
+		route?.params
+			? await editPost({ ...postBody, route })
+			: await createPost(postBody)
 		navigation.goBack()
 	}, [postBody])
 
 	return (
 		<View style={styles(theme).container}>
-			<PageTitle title='Создать пост'>
+			<PageTitle title={route?.params ? 'Редактировать пост' : 'Создать пост'}>
 				<Checkmark
 					onPress={handleCreate}
-					disabled={postBody.description === '' ? true : false}
+					disabled={postBody?.description === '' ? true : false}
 				/>
 			</PageTitle>
 			<TextInput
+				defaultValue={route?.params?.description}
 				onChangeText={handleTyping}
 				placeholder={'Что нового?'}
 				placeholderTextColor={Palette[theme].placeholder}

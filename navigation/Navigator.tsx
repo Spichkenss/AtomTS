@@ -6,7 +6,6 @@ import { useTheme } from '../hooks/useTheme'
 import { Palette } from '../screens/ui/Palette'
 import { useCheckAuthMutation } from '../store/services/AuthService'
 import AuthStack from './AuthStack'
-import { navigationRef } from './RootNavigation'
 import StackNavigator from './StackNavigator'
 
 const Navigator = () => {
@@ -22,7 +21,7 @@ const Navigator = () => {
 	}, [])
 
 	return (
-		<NavigationContainer ref={navigationRef}>
+		<NavigationContainer>
 			{user ? <StackNavigator /> : <AuthStack />}
 			<StatusBar
 				backgroundColor={Palette[theme].primary}

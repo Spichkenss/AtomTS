@@ -1,38 +1,51 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
-import { AntDesign } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from './Palette'
-import { FC } from 'react'
-import { useLikePostMutation } from '../../store/services/PostApi'
+import { FC, useEffect } from 'react'
+import {
+	PostLikesResponse,
+	useGetLikesQuery,
+	useLazyGetLikesQuery,
+	useLikePostMutation,
+} from '../../store/services/PostApi'
 import { IPostItem } from '../home/posts/PostItem'
 
 const PostLikeButton: FC<IPostItem> = ({ postData }) => {
 	const { theme } = useTheme()
-	const [likePost] = useLikePostMutation()
+	const [getLikes, { data: post }] = useLazyGetLikesQuery()
+	const [likePost, { data, isSuccess }] = useLikePostMutation()
 
-	const likeRequest = async () => {
-		await likePost(postData.id)
-	}
+	useEffect(() => {
+		const fetchLikes = async (id: number) => {
+			await getLikes(id)
+		}
+		if (postData?.id) {
+			fetchLikes(postData?.id)
+		}
+	}, [postData?.id])
+
 	return (
 		<TouchableOpacity
 			activeOpacity={0.4}
 			style={styles(theme, post).button}
-			onPress={likeRequest}
+			onPress={() => likePost(postData.id)}
 		>
-			<AntDesign
-				name='hearto'
+			<Feather
+				name='heart'
 				size={20}
 				color={post?.my_like ? Palette.red : Palette[theme].iconInactive}
 			/>
-			<Text style={styles(theme, post).counter}>{post?.likers.count}</Text>
+
+			<Text style={styles(theme, post).counter}>{post?.likes.count}</Text>
 		</TouchableOpacity>
 	)
 }
 
 export default PostLikeButton
 
-const styles = (theme: ThemeType, post: LikersResponse | undefined) =>
+const styles = (theme: ThemeType, post: PostLikesResponse | undefined) =>
 	StyleSheet.create({
 		button: {
 			backgroundColor: post?.my_like ? Palette.pink : Palette[theme].postButton,
@@ -43,7 +56,7 @@ const styles = (theme: ThemeType, post: LikersResponse | undefined) =>
 			alignItems: 'center',
 		},
 		counter: {
-			marginLeft: 7,
+			marginLeft: 4,
 			fontSize: 16,
 			color: post?.my_like ? Palette.red : Palette[theme].iconInactive,
 		},

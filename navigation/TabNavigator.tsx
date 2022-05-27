@@ -24,6 +24,7 @@ const TabNavigator = () => {
 	const { theme } = useTheme()
 	return (
 		<Tabbar.Navigator
+			initialRouteName='Home'
 			screenOptions={{
 				headerStyle: {
 					backgroundColor: Palette[theme].primary,
