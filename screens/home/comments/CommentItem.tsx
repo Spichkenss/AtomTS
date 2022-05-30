@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { FC } from 'react'
-import { CommentType } from '../../../store/services/PostApi'
+import { CommentType } from '../../../store/services/PostService'
 import { useTheme } from '../../../hooks/useTheme'
 import { ThemeType } from '../../../store/models/ITheme'
 import CircleAvatar from '../../ui/CircleAvatar'

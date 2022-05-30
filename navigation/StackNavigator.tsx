@@ -1,6 +1,7 @@
 import { NavigatorScreenParams, RouteProp } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useTheme } from '../hooks/useTheme'
+import SuggestFull from '../screens/friends/SuggestFull'
 import Comments from '../screens/home/comments/Comments'
 import Notifications from '../screens/home/notifications/Notifications'
 import AddPostPage from '../screens/home/posts/AddPostPage'
@@ -15,6 +16,7 @@ export type AppStackProps = {
 	EditProfile: undefined
 	AddPostPage: { description: string; id: number } | undefined
 	Comments: { id: number }
+	SuggestFull: undefined
 }
 
 const Stack = createNativeStackNavigator<AppStackProps>()
@@ -60,6 +62,13 @@ const StackNavigator = () => {
 				component={Comments}
 				options={{
 					headerShown: false,
+				}}
+			/>
+			<Stack.Screen
+				name='SuggestFull'
+				component={SuggestFull}
+				options={{
+					title: 'Рекомендации',
 				}}
 			/>
 		</Stack.Navigator>

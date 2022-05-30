@@ -1,7 +1,5 @@
-import { userSlice } from './../reducers/UserSlice'
 import { IUser } from './../models/IUser'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
-import { RootState } from '../store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export interface UserResponse {

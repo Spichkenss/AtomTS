@@ -1,64 +1,47 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
-import React from 'react'
+import React, { FC } from 'react'
 import { useTheme } from '../../hooks/useTheme'
 import { Palette } from './Palette'
+import {
+	StatusType,
+	useAcceptRequestMutation,
+	useDeleteFriendMutation,
+} from '../../store/services/FriendService'
 
-type StatusType = 'user-clock' | 'user-check' | 'user-plus'
+import { DefineButtonTypeByRelation } from '../../store/models/RelationStatus'
 
-enum ActionType {
-	SetFriends = 'SetFriends',
-	SetRequest = 'SetRequest',
-	SetUnfriends = 'SetUnfriends',
-}
-
-interface IState {
+interface IManageFriendButton {
 	status: StatusType
+	id: number
 }
 
-interface IAction {
-	type: ActionType
-	payload: {
-		status: StatusType
-	}
-}
-
-const initialState: IState = { status: 'user-plus' }
-
-const reducer: React.Reducer<IState, IAction> = (state, action) => {
-	switch (action.type) {
-		case ActionType.SetFriends:
-			return { status: action.payload.status }
-		case ActionType.SetRequest:
-			return { status: action.payload.status }
-		case ActionType.SetUnfriends:
-			return { status: action.payload.status }
-		default:
-			throw new Error()
-	}
-}
-
-const ManageFriendButton = () => {
-	const [state, dispatch] = React.useReducer<React.Reducer<IState, IAction>>(
-		reducer,
-		initialState
-	)
-
+const ManageFriendButton: FC<IManageFriendButton> = ({ id, status }) => {
 	const { theme } = useTheme()
+	const [deleteFriend, { isSuccess: deleteSuccess }] = useDeleteFriendMutation()
+	const [acceptRequest, { isSuccess: acceptSuccess }] =
+		useAcceptRequestMutation()
 
-	const acceptFriend = () => {}
+	const switchRelation = async (relation: StatusType) => {
+		switch (relation) {
+			case 'friends':
+				await deleteFriend(id)
+				break
+			case 'decides':
+				await acceptRequest(id)
+				break
+			default:
+				return relation
+		}
+	}
 
 	return (
 		<TouchableOpacity
-			onPress={() =>
-				dispatch({
-					type: ActionType.SetRequest,
-					payload: { status: 'user-clock' },
-				})
-			}
+			style={{ paddingLeft: 10 }}
+			onPress={() => switchRelation(status)}
 		>
 			<FontAwesome5
-				name={state.status}
+				name={DefineButtonTypeByRelation(status)}
 				size={22}
 				color={Palette[theme].secondary}
 			/>
@@ -67,5 +50,3 @@ const ManageFriendButton = () => {
 }
 
 export default ManageFriendButton
-
-const styles = StyleSheet.create({})

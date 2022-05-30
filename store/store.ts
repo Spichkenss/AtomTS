@@ -1,17 +1,21 @@
+import { friendApi } from './services/FriendService'
 import { authApi } from './services/AuthService'
 import { userApi } from './services/UserService'
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import userReducer from './reducers/UserSlice'
 import themeReducer from './reducers/ThemeSlice'
-import { postApi } from './services/PostApi'
+import relationReducer from './reducers/RelationSlice'
+import { postApi } from './services/PostService'
 
 const rootReducer = combineReducers({
 	themeReducer,
 	userReducer,
+	relationReducer,
 	[userApi.reducerPath]: userApi.reducer,
 	[authApi.reducerPath]: authApi.reducer,
 	[postApi.reducerPath]: postApi.reducer,
+	[friendApi.reducerPath]: friendApi.reducer,
 })
 
 export const setupStore = () => {
@@ -21,7 +25,8 @@ export const setupStore = () => {
 			getDefaultMiddleware()
 				.concat(userApi.middleware)
 				.concat(authApi.middleware)
-				.concat(postApi.middleware),
+				.concat(postApi.middleware)
+				.concat(friendApi.middleware),
 	})
 }
 

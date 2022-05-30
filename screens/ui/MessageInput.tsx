@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from './Palette'
 import { useTheme } from '../../hooks/useTheme'
-import { CommentRequest } from '../../store/services/PostApi'
+import { CommentRequest } from '../../store/services/PostService'
 
 interface IInput {
 	placeholder: string

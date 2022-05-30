@@ -9,7 +9,7 @@ import {
 	useGetLikesQuery,
 	useLazyGetLikesQuery,
 	useLikePostMutation,
-} from '../../store/services/PostApi'
+} from '../../store/services/PostService'
 import { IPostItem } from '../home/posts/PostItem'
 
 const PostLikeButton: FC<IPostItem> = ({ postData }) => {

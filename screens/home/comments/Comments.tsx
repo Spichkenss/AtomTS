@@ -9,7 +9,7 @@ import {
 	CommentType,
 	useAddCommentMutation,
 	useGetCommentsQuery,
-} from '../../../store/services/PostApi'
+} from '../../../store/services/PostService'
 import Loader from '../../ui/Loader'
 import MessageInput from '../../ui/MessageInput'
 

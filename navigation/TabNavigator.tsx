@@ -10,6 +10,8 @@ import { useTheme } from '../hooks/useTheme'
 import CircleAvatar from '../screens/ui/CircleAvatar'
 import NotificationBell from '../screens/ui/NotificationBell'
 import ProfileEditor from '../screens/ui/ProfileEditor'
+import { useGetRequestsQuery } from '../store/services/FriendService'
+import { Text } from 'react-native'
 
 export type RootStackParamList = {
 	Home: undefined
@@ -22,10 +24,12 @@ const Tabbar = createBottomTabNavigator<RootStackParamList>()
 
 const TabNavigator = () => {
 	const { theme } = useTheme()
+	const { data: requests } = useGetRequestsQuery()
 	return (
 		<Tabbar.Navigator
 			initialRouteName='Home'
 			screenOptions={{
+				unmountOnBlur: true,
 				headerStyle: {
 					backgroundColor: Palette[theme].primary,
 					elevation: 0,
@@ -87,6 +91,8 @@ const TabNavigator = () => {
 				name='Friends'
 				component={Friends}
 				options={{
+					tabBarBadge: requests?.count ? requests?.count : undefined,
+					tabBarBadgeStyle: { textAlignVertical: 'center' },
 					title: 'Друзья',
 					tabBarIcon: ({ focused }) => (
 						<Feather

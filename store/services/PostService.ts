@@ -1,7 +1,7 @@
-import { IUser } from './../models/IUser'
-import { AppStackProps } from './../../navigation/StackNavigator'
+import { IUser } from '../models/IUser'
+import { AppStackProps } from '../../navigation/StackNavigator'
 import { RouteProp } from '@react-navigation/native'
-import { IPost } from './../models/IPost'
+import { IPost } from '../models/IPost'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { RootState } from '../store'
 

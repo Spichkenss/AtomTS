@@ -53,7 +53,7 @@ const PostItem: FC<IPostItem> = ({ postData }) => {
 			</View>
 			<View>
 				<Text style={styles(theme).description}>{postData?.description}</Text>
-				{!postData?.media && (
+				{postData?.media && (
 					<Image
 						source={require('../../../avatar.jpg')}
 						style={styles(theme).media}

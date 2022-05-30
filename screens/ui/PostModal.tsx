@@ -11,7 +11,7 @@ import { Feather } from '@expo/vector-icons'
 import { useTheme } from '../../hooks/useTheme'
 import { Palette } from './Palette'
 import { ThemeType } from '../../store/models/ITheme'
-import { useDeletePostMutation } from '../../store/services/PostApi'
+import { useDeletePostMutation } from '../../store/services/PostService'
 import { IPost } from '../../store/models/IPost'
 import {
 	NavigationProp,

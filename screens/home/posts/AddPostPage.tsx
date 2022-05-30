@@ -9,7 +9,7 @@ import {
 	EditPostRequest,
 	useCreatePostMutation,
 	useEditPostMutation,
-} from '../../../store/services/PostApi'
+} from '../../../store/services/PostService'
 import PageTitle from '../../ui/PageTitle'
 import Checkmark from '../../ui/Checkmark'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
