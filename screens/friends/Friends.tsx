@@ -1,37 +1,48 @@
-import { useEffect } from 'react'
+import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import {
 	RelationType,
 	useGetFriendsQuery,
+	useGetRequestsQuery,
 } from '../../store/services/FriendService'
-import Loader from '../ui/Loader'
 import { Palette } from '../ui/Palette'
 import FriendItem from './FriendItem'
 import Requests from './Requests'
 import SuggestPart from './SuggestPart'
 
 const Friends = () => {
+	const { user } = useAuth()
 	const { theme } = useTheme()
-	const { data, isFetching, refetch } = useGetFriendsQuery()
+	const {
+		data: friends,
+		isFetching,
+		refetch,
+		isLoading,
+	} = useGetFriendsQuery(user?.id as number)
+	const { data: requests, refetch: refetchReq } = useGetRequestsQuery()
 
 	return (
 		<FlatList
-			refreshing={isFetching}
-			onRefresh={refetch}
+			refreshing={isLoading}
+			onRefresh={() => {
+				refetch()
+				refetchReq()
+			}}
 			style={styles(theme).container}
-			data={data?.rows}
+			data={friends?.rows}
 			keyExtractor={(item: RelationType) => item.user.id.toString()}
 			renderItem={({ item }) => <FriendItem data={item} />}
 			ListHeaderComponent={
 				<View style={styles(theme).header}>
-					<Requests />
+					<Requests isFetching={isFetching} requests={requests} />
 					<SuggestPart />
-					{data?.count ? (
+					{friends?.count ? (
 						<Text style={styles(theme).headerText}>
 							Мои друзья
-							<Text style={styles(theme).counter}>{data?.count}</Text>
+							<Text style={styles(theme).counter}> {friends?.count}</Text>
 						</Text>
 					) : (
 						<Text style={styles(theme).headerText}>У вас пока нет друзей</Text>

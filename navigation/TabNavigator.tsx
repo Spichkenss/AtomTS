@@ -11,7 +11,6 @@ import CircleAvatar from '../screens/ui/CircleAvatar'
 import NotificationBell from '../screens/ui/NotificationBell'
 import ProfileEditor from '../screens/ui/ProfileEditor'
 import { useGetRequestsQuery } from '../store/services/FriendService'
-import { Text } from 'react-native'
 
 export type RootStackParamList = {
 	Home: undefined

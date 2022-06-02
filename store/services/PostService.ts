@@ -80,6 +80,10 @@ export const postApi = createApi({
 			query: () => '/',
 			providesTags: res => ['Post'],
 		}),
+		getUserPosts: builder.query<IPost[], number>({
+			query: (id: number) => `/id/posts?id=${id}`,
+			providesTags: res => ['Post'],
+		}),
 		createPost: builder.mutation<IPost, CreatePostRequest>({
 			query: (data: CreatePostRequest) => ({
 				url: '/create',
@@ -120,11 +124,20 @@ export const postApi = createApi({
 				method: 'POST',
 				body: data,
 			}),
-			invalidatesTags: ['Comment'],
+			invalidatesTags: res => ['Comment'],
 		}),
 		getComments: builder.query<GetCommentsResponse, number>({
 			query: (id: number) => `/id/comments?id=${id}`,
-			providesTags: res => ['Comment'],
+			providesTags: result =>
+				result
+					? [
+							...result.rows.map(({ id }) => ({
+								type: 'Comment' as const,
+								id: id,
+							})),
+							'Comment',
+					  ]
+					: ['Comment'],
 		}),
 	}),
 })
@@ -134,11 +147,13 @@ export const {
 	useGetPostQuery,
 	useLikePostMutation,
 	useGetAllPostsQuery,
+	useGetUserPostsQuery,
 	useGetLikesQuery,
 	useLazyGetLikesQuery,
 	useDeletePostMutation,
 	useEditPostMutation,
 	useAddCommentMutation,
 	useGetCommentsQuery,
+	useLazyGetCommentsQuery,
 	usePrefetch,
 } = postApi

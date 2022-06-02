@@ -34,7 +34,7 @@ const Header: FC<IHeader> = ({ title, counter }) => {
 			>
 				<Text
 					style={{
-						color: Palette[theme].iconActive,
+						color: 'white',
 					}}
 				>
 					{counter}

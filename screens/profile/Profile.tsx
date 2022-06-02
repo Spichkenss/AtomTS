@@ -1,31 +1,66 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { useGetUserPostsQuery } from '../../store/services/PostService'
 import { useAuth } from '../../hooks/useAuth'
+import { IPost } from '../../store/models/IPost'
+import PostItem from '../home/posts/PostItem'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
-import CircleAvatar from '../ui/CircleAvatar'
 import { Palette } from '../ui/Palette'
-import { FC } from 'react'
+import ProfileHeader from './ProfileHeader'
+import MyButtons from './MyButtons'
+import FriendList from './friends/FriendList'
+import Loader from '../ui/Loader'
 
-const Profile: FC<any> = ({ navigation }) => {
+const Profile = () => {
 	const { user } = useAuth()
 	const { theme } = useTheme()
+	const {
+		data: posts,
+		isLoading,
+		refetch,
+	} = useGetUserPostsQuery(user?.id as number)
 
-	return (
-		<View style={styles(theme).container}>
-			<View style={styles(theme).header}>
-				<CircleAvatar height={90} width={90} image={'../../avatar.jpg'} />
-				<View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
-					<Text style={styles(theme).name}>
-						{user?.name} {user?.surname}
-					</Text>
-					<Text style={styles(theme).status}>онлайн</Text>
-
-					<Text style={styles(theme).status} numberOfLines={1}>
-						{user?.status}
-					</Text>
-				</View>
-			</View>
-		</View>
+	return isLoading ? (
+		<Loader />
+	) : (
+		<FlatList
+			style={styles(theme).container}
+			refreshing={isLoading}
+			onRefresh={refetch}
+			data={posts}
+			keyExtractor={(item: IPost) => item.id.toString()}
+			renderItem={({ item }) => <PostItem postData={item} />}
+			ItemSeparatorComponent={() => <View style={{ margin: 2.5 }}></View>}
+			ListHeaderComponent={
+				<ProfileHeader>
+					<MyButtons />
+					<FriendList />
+					{posts?.length != 0 && (
+						<View
+							style={{
+								backgroundColor: Palette[theme].primary,
+								paddingHorizontal: 15,
+								paddingVertical: 5,
+							}}
+						>
+							<Text
+								style={{
+									paddingVertical: 5,
+									alignSelf: 'flex-start',
+									fontSize: 16,
+									borderBottomColor: Palette[theme].secondary,
+									borderBottomWidth: 2,
+									color: Palette[theme].text,
+								}}
+							>
+								Все записи
+							</Text>
+						</View>
+					)}
+				</ProfileHeader>
+			}
+		/>
 	)
 }
 
@@ -36,23 +71,5 @@ const styles = (theme: ThemeType) =>
 		container: {
 			flex: 1,
 			backgroundColor: Palette[theme].background,
-		},
-		header: {
-			flexDirection: 'row',
-			paddingVertical: 10,
-			paddingHorizontal: 15,
-			backgroundColor: Palette[theme].primary,
-		},
-		name: {
-			flex: 1,
-			flexWrap: 'wrap',
-			fontSize: 24,
-			fontWeight: '500',
-			color: Palette[theme].text,
-		},
-		status: {
-			flex: 1,
-			flexWrap: 'wrap',
-			color: Palette[theme].text,
 		},
 	})

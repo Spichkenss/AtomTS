@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, useImperativeHandle, useState } from 'react'
+import React, { createRef, FC, useRef } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { ThemeType } from '../../store/models/ITheme'
@@ -13,18 +13,14 @@ interface IInput {
 	value: string
 }
 
-const MessageInput: FC<IInput> = ({
-	placeholder,
-	onPress,
-	setValue,
-	value,
-}) => {
+const MessageInput: FC<IInput> = ({ placeholder, onPress, setValue }) => {
 	const { theme } = useTheme()
+	const ref = createRef<TextInput>()
 
 	return (
 		<View style={styles(theme).container}>
 			<TextInput
-				value={value}
+				ref={ref}
 				placeholder={placeholder}
 				placeholderTextColor={Palette[theme].placeholder}
 				onChangeText={(text: string) => setValue(text)}
@@ -32,7 +28,13 @@ const MessageInput: FC<IInput> = ({
 				selectionColor={Palette[theme].carete}
 				multiline={true}
 			/>
-			<TouchableOpacity onPress={onPress}>
+			<TouchableOpacity
+				onPress={() => {
+					ref.current?.clear()
+					onPress()
+					ref.current?.blur()
+				}}
+			>
 				<Ionicons name='send' size={28} color={Palette[theme].secondary} />
 			</TouchableOpacity>
 		</View>

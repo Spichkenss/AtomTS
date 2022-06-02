@@ -9,6 +9,7 @@ import {
 	CommentType,
 	useAddCommentMutation,
 	useGetCommentsQuery,
+	useGetLikesQuery,
 } from '../../../store/services/PostService'
 import Loader from '../../ui/Loader'
 import MessageInput from '../../ui/MessageInput'
@@ -22,7 +23,7 @@ type Props = NativeStackScreenProps<AppStackProps, 'Comments'>
 const Comments: FC<Props> = ({ route }) => {
 	const { id } = route.params
 	const { theme } = useTheme()
-	const { data, isFetching, refetch } = useGetCommentsQuery(id)
+	const { data, isLoading, isFetching, refetch } = useGetCommentsQuery(id)
 	const [addComment] = useAddCommentMutation()
 	const [comment, setComment] = useState<string>('')
 
@@ -33,7 +34,7 @@ const Comments: FC<Props> = ({ route }) => {
 		} as CommentRequest)
 	}
 
-	return isFetching ? (
+	return isLoading ? (
 		<Loader />
 	) : (
 		<>

@@ -56,8 +56,8 @@ export const friendApi = createApi({
 			query: (id: number) => `/id/relation?id=${id}`,
 			providesTags: result => [{ type: 'Relation', id: result?.relation_id }],
 		}),
-		getFriends: builder.query<GetFriends, void>({
-			query: () => '/',
+		getFriends: builder.query<GetFriends, number>({
+			query: (id: number) => `/id/friends?id=${id}`,
 			providesTags: (result, error, arg) =>
 				result
 					? [
@@ -95,22 +95,28 @@ export const friendApi = createApi({
 		sendRequest: builder.mutation<SendRequset, number>({
 			query: (id: number) => ({ url: `/id/request?id=${id}`, method: 'POST' }),
 			invalidatesTags: result => [
-				{ type: 'Friend', id: result?.friend_id },
-				{ type: 'Request', id: result?.friend_id },
+				// { type: 'Friend', id: result?.friend_id },
+				// { type: 'Request', id: result?.friend_id },
+				'Friend',
+				'Request',
+				'Suggest',
 			],
 		}),
 		acceptRequest: builder.mutation<AcceptRequset, number>({
 			query: (id: number) => ({ url: `/id/accept?id=${id}`, method: 'POST' }),
 			invalidatesTags: result => [
-				{ type: 'Friend', id: result?.friend_id },
-				{ type: 'Request', id: result?.friend_id },
+				// { type: 'Friend', id: result?.friend_id },
+				// { type: 'Request', id: result?.friend_id },
+				'Friend',
+				'Request',
 				'Suggest',
 			],
 		}),
 		deleteFriend: builder.mutation<DeleteRequset, number>({
 			query: (id: number) => ({ url: `/id/delete?id=${id}`, method: 'POST' }),
 			invalidatesTags: result => [
-				{ type: 'Friend', id: result?.friend_id },
+				// { type: 'Friend', id: result?.friend_id },
+				'Friend',
 				'Request',
 				'Suggest',
 			],

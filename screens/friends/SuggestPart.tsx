@@ -20,15 +20,16 @@ import AddUserButton from '../ui/AddUserButton'
 
 const SuggestPart = () => {
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
-	const { data } = useGetSuggestQuery()
+	const { data: suggests } = useGetSuggestQuery()
 	const { theme } = useTheme()
 	const [randomUser, setRandomUser] = useState<IUser>()
 
 	useEffect(() => {
-		data && setRandomUser(data[Math.floor(Math.random() * data?.length)])
-	}, [data])
+		suggests?.length &&
+			setRandomUser(suggests[Math.floor(Math.random() * suggests?.length)])
+	}, [suggests])
 
-	return data ? (
+	return suggests ? (
 		<View style={styles(theme).container}>
 			<Separator />
 			<View style={styles(theme).head}>

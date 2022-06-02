@@ -17,6 +17,7 @@ import PostLikeButton from '../../ui/PostLikeButton'
 import PostModal from '../../ui/PostModal'
 import { useAuth } from '../../../hooks/useAuth'
 import { AppStackProps } from '../../../navigation/StackNavigator'
+import { useLazyGetCommentsQuery } from '../../../store/services/PostService'
 
 export interface IPostItem {
 	postData: IPost
@@ -26,6 +27,16 @@ const PostItem: FC<IPostItem> = ({ postData }) => {
 	const { user } = useAuth()
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	const { theme } = useTheme()
+	const [getComments, { data: comments }] = useLazyGetCommentsQuery()
+
+	useEffect(() => {
+		const fetchComments = async (id: number) => {
+			await getComments(id)
+		}
+		if (postData?.id) {
+			fetchComments(postData?.id)
+		}
+	}, [comments?.count])
 
 	return (
 		<View style={styles(theme).container}>
@@ -73,9 +84,7 @@ const PostItem: FC<IPostItem> = ({ postData }) => {
 						size={20}
 						color={Palette[theme].iconInactive}
 					/>
-					<Text style={styles(theme).counter}>
-						{postData?.comments_counter}
-					</Text>
+					<Text style={styles(theme).counter}>{comments?.count}</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
