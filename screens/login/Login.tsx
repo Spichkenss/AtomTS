@@ -1,13 +1,17 @@
 import {
 	Dimensions,
+	Keyboard,
+	StatusBar,
 	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
+	View,
 } from 'react-native'
 import { FC, useState } from 'react'
 import {
 	LoginRequest,
+	UserResponse,
 	useSignInMutation,
 } from '../../store/services/AuthService'
 import { useTheme } from '../../hooks/useTheme'
@@ -20,10 +24,11 @@ import {
 	ParamListBase,
 	useNavigation,
 } from '@react-navigation/native'
+import ThemeToggler from '../ui/ThemeToggler'
 
 const Login: FC = () => {
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
-
+	const [error, setError] = useState<string | null>(null)
 	const [signIn, { data }] = useSignInMutation()
 	const { theme } = useTheme()
 
@@ -33,20 +38,38 @@ const Login: FC = () => {
 	})
 
 	const handleLogin = async () => {
-		await signIn(form)
-			.unwrap()
-			.then(async res => await AsyncStorage.setItem('token', res.token))
+		try {
+			await signIn(form)
+				.unwrap()
+				.then(async res => await AsyncStorage.setItem('token', res.token))
+		} catch (error: any) {
+			setError(error.data.message)
+		} finally {
+			Keyboard.dismiss()
+		}
 	}
 
 	return (
 		<AnimatedView style={styles(theme).container}>
+			{error && (
+				<View style={styles(theme).error}>
+					<Text style={{ color: Palette[theme].text, fontSize: 18 }}>
+						{error}
+					</Text>
+				</View>
+			)}
+			<View style={{ position: 'absolute', bottom: 15, right: 15 }}>
+				<ThemeToggler />
+			</View>
 			<TextInput
+				onFocus={() => setError(null)}
 				placeholder='Логин'
 				placeholderTextColor={Palette[theme].placeholder}
 				style={styles(theme).input}
 				onChangeText={text => setForm({ ...form, email: text })}
 			/>
 			<TextInput
+				onFocus={() => setError(null)}
 				placeholder='Пароль'
 				placeholderTextColor={Palette[theme].placeholder}
 				style={styles(theme).input}
@@ -101,5 +124,15 @@ const styles = (theme: ThemeType) =>
 			width: width * 0.4,
 			alignItems: 'center',
 			justifyContent: 'center',
+		},
+		error: {
+			position: 'absolute',
+			top: StatusBar.currentHeight,
+			paddingVertical: 10,
+			paddingHorizontal: 15,
+			borderWidth: 2,
+			borderRadius: 10,
+			borderColor: Palette.red,
+			backgroundColor: Palette.pink,
 		},
 	})

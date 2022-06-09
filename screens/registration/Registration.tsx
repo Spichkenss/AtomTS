@@ -4,6 +4,7 @@ import {
 	Text,
 	TextInput,
 	TouchableOpacity,
+	View,
 } from 'react-native'
 import { FC, useState } from 'react'
 import {
@@ -20,17 +21,20 @@ import {
 	ParamListBase,
 	useNavigation,
 } from '@react-navigation/native'
+import ThemeToggler from '../ui/ThemeToggler'
 
 const Registration: FC = () => {
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 
-	const [signUp, { data }] = useSignUpMutation()
+	const [signUp] = useSignUpMutation()
 	const { theme } = useTheme()
 
 	const [form, setForm] = useState<RegistrationRequest>({
 		email: '',
 		password: '',
 		username: '',
+		name: '',
+		surname: '',
 	})
 
 	const handleRegistration = async () => {
@@ -41,8 +45,11 @@ const Registration: FC = () => {
 
 	return (
 		<AnimatedView style={styles(theme).container}>
+			<View style={{ position: 'absolute', bottom: 15, right: 15 }}>
+				<ThemeToggler />
+			</View>
 			<TextInput
-				placeholder='Логин'
+				placeholder='Почта'
 				placeholderTextColor={Palette[theme].placeholder}
 				style={styles(theme).input}
 				onChangeText={text => setForm({ ...form, email: text })}
@@ -52,6 +59,19 @@ const Registration: FC = () => {
 				placeholderTextColor={Palette[theme].placeholder}
 				style={styles(theme).input}
 				onChangeText={text => setForm({ ...form, password: text })}
+				secureTextEntry={true}
+			/>
+			<TextInput
+				placeholder='Имя'
+				placeholderTextColor={Palette[theme].placeholder}
+				style={styles(theme).input}
+				onChangeText={text => setForm({ ...form, name: text })}
+			/>
+			<TextInput
+				placeholder='Фамилия'
+				placeholderTextColor={Palette[theme].placeholder}
+				style={styles(theme).input}
+				onChangeText={text => setForm({ ...form, surname: text })}
 			/>
 			<TextInput
 				placeholder='Имя пользователя'

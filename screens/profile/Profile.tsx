@@ -22,6 +22,7 @@ const Profile = () => {
 	} = useGetUserPostsQuery(user?.id as number)
 
 	useEffect(() => {
+		console.log(user)
 		refetch()
 	}, [user])
 

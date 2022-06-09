@@ -17,6 +17,13 @@ export interface RegistrationRequest {
 	email: string
 	password: string
 	username: string
+	name: string
+	surname: string
+}
+
+export interface IError {
+	status: number
+	message: string
 }
 
 export const authApi = createApi({
