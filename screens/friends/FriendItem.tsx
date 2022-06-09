@@ -33,15 +33,15 @@ const FriendItem: FC<IFriendItem> = ({ data }) => {
 	const { theme } = useTheme()
 
 	useEffect(() => {
-		if (newDialog?.id) {
+		if (newDialog?.dialog.id) {
 			navigation.dispatch(
 				CommonActions.navigate('Dialog', {
 					user: data.user,
-					dialogId: newDialog.id,
+					dialogName: newDialog.dialog.dialogName,
 				})
 			)
 		}
-	}, [newDialog?.id])
+	}, [newDialog?.dialog.dialogName])
 
 	const createDialogHandler = async () => {
 		await createDialog(data.friend_id)

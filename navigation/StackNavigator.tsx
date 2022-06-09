@@ -22,7 +22,7 @@ export type AppStackProps = {
 	Comments: { id: number }
 	SuggestFull: undefined
 	FriendProfile: { userId: number; username: string }
-	Dialog: { user: IUser; dialogId: number }
+	Dialog: { user: IUser; dialogName: number }
 }
 
 const Stack = createNativeStackNavigator<AppStackProps>()

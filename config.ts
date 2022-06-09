@@ -1,2 +1,3 @@
-export const staticURL = 'http://192.168.231.150:5000/images/'
-export const API = 'http://192.168.231.150:5000/api'
+export const LOCALHOST = 'http://192.168.1.4:5000'
+export const staticURL = `${LOCALHOST}/images/`
+export const API = `${LOCALHOST}/api`

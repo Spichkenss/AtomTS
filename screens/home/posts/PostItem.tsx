@@ -65,7 +65,7 @@ const PostItem: FC<IPostItem> = ({ postData }) => {
 							</Text>
 							<Text style={styles(theme).timestamp}>
 								{moment(postData?.createdAt)
-									.add(-30, 'seconds')
+									.add(-1, 'minutes')
 									.locale('ru')
 									.fromNow()}
 							</Text>

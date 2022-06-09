@@ -13,7 +13,7 @@ const Messanger = () => {
 		<View style={styles(theme).container}>
 			<FlatList
 				data={dialogs}
-				keyExtractor={(item: IDialog) => item.id.toString()}
+				keyExtractor={(item: IDialog) => item.dialogName.toString()}
 				renderItem={({ item }) => <MessangerItem dialog={item} />}
 			/>
 		</View>

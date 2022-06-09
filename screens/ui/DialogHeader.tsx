@@ -5,7 +5,7 @@ import {
 	useNavigation,
 } from '@react-navigation/native'
 import { FC } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import { IUser } from '../../store/models/IUser'
@@ -21,7 +21,17 @@ const DialogHeader: FC<Props> = ({ user }) => {
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	const { theme } = useTheme()
 	return (
-		<View style={styles(theme).container}>
+		<Pressable
+			onPress={() =>
+				navigation.dispatch(
+					CommonActions.navigate({
+						name: 'FriendProfile',
+						params: { userId: user.id, username: user.username },
+					})
+				)
+			}
+			style={styles(theme).container}
+		>
 			<BackArrow />
 			<CircleAvatar
 				width={40}
@@ -31,7 +41,7 @@ const DialogHeader: FC<Props> = ({ user }) => {
 					navigation.dispatch(
 						CommonActions.navigate({
 							name: 'FriendProfile',
-							params: { userId: user.id },
+							params: { userId: user.id, username: user.username },
 						})
 					)
 				}
@@ -39,7 +49,7 @@ const DialogHeader: FC<Props> = ({ user }) => {
 			<Text style={styles(theme).username}>
 				{user.name} {user.surname}
 			</Text>
-		</View>
+		</Pressable>
 	)
 }
 

@@ -8,6 +8,7 @@ import userReducer from './reducers/UserSlice'
 import themeReducer from './reducers/ThemeSlice'
 import relationReducer from './reducers/RelationSlice'
 import { postApi } from './services/PostService'
+import { messageApi } from './services/MessageService'
 
 const rootReducer = combineReducers({
 	themeReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
 	[postApi.reducerPath]: postApi.reducer,
 	[friendApi.reducerPath]: friendApi.reducer,
 	[chatApi.reducerPath]: chatApi.reducer,
+	[messageApi.reducerPath]: messageApi.reducer,
 })
 
 export const setupStore = () => {
@@ -29,7 +31,8 @@ export const setupStore = () => {
 				.concat(authApi.middleware)
 				.concat(postApi.middleware)
 				.concat(friendApi.middleware)
-				.concat(chatApi.middleware),
+				.concat(chatApi.middleware)
+				.concat(messageApi.middleware),
 	})
 }
 

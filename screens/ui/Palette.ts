@@ -17,6 +17,9 @@ export const Palette = {
 		input: '#f3f4f6',
 		tabbar: '#f9f9f9',
 		carete: '#9ca3aa',
+		myMessage: '#cce4ff',
+		friendMessage: '#ecedf1',
+		dialogBackground: '#ffffff',
 	},
 
 	dark: {
@@ -33,5 +36,8 @@ export const Palette = {
 		input: '#232323',
 		tabbar: '#2c2d2f',
 		carete: '#304e72',
+		myMessage: '#454648',
+		friendMessage: '#2c2d2f',
+		dialogBackground: '#191919',
 	},
 }

@@ -36,7 +36,7 @@ const CommentsPost: FC<ICommentPost> = ({ id }) => {
 						<Text style={styles(theme).username}>{data?.user.username}</Text>
 						<Text style={styles(theme).timestamp}>
 							{moment(data?.createdAt)
-								.add(-30, 'seconds')
+								.add(-1, 'minutes')
 								.locale('ru')
 								.fromNow()}
 						</Text>

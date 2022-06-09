@@ -6,11 +6,16 @@ import {
 } from '@react-navigation/native'
 import { FC } from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { io } from 'socket.io-client'
+import { LOCALHOST } from '../../config'
 import { useTheme } from '../../hooks/useTheme'
+import { ChatEvents } from '../../store/models/ChatEvents'
 import { ThemeType } from '../../store/models/ITheme'
 import { IDialog } from '../../store/services/ChatService'
 import CircleAvatar from '../ui/CircleAvatar'
 import { Palette } from '../ui/Palette'
+
+export const socket = io(LOCALHOST)
 
 interface Props {
 	dialog: IDialog
@@ -19,17 +24,21 @@ interface Props {
 const MessangerItem: FC<Props> = ({ dialog }) => {
 	const { theme } = useTheme()
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
+
+	const joinRoom = () => {
+		socket.emit(ChatEvents.JoinRoom, dialog.dialogName)
+		navigation.dispatch(
+			CommonActions.navigate('Dialog', {
+				user: dialog.user,
+				dialogName: dialog.dialogName,
+			})
+		)
+	}
+
 	return (
 		<TouchableOpacity
 			activeOpacity={0.7}
-			onPress={() =>
-				navigation.dispatch(
-					CommonActions.navigate('Dialog', {
-						user: dialog.user,
-						dialogId: dialog.id,
-					})
-				)
-			}
+			onPress={joinRoom}
 			style={styles(theme).container}
 		>
 			<CircleAvatar
@@ -38,7 +47,10 @@ const MessangerItem: FC<Props> = ({ dialog }) => {
 				image={dialog.user.avatar}
 				onPress={() =>
 					navigation.dispatch(
-						CommonActions.navigate('FriendProfile', { userId: dialog.friendId })
+						CommonActions.navigate('FriendProfile', {
+							userId: dialog.friendId,
+							username: dialog.user.username,
+						})
 					)
 				}
 			/>

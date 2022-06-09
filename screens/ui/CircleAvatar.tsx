@@ -26,7 +26,6 @@ const CircleAvatar: FC<ICircleAvatar> = props => {
 	const onPressAction = () => {
 		props.onPress ? props.onPress() : navigation.navigate('Profile')
 	}
-	console.log(props.image)
 
 	return (
 		<Pressable style={styles(theme, props).circle} onPress={onPressAction}>

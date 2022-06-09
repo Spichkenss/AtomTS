@@ -3,23 +3,21 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { API } from '../../config'
 import { RootState } from '../store'
 
-export interface IMessage {
-	id: number
-	sender: IUser
-	body: string
-	timestamp: Date
-}
-
-export interface SendMessage {
-	userId: number
-	body: string
-	dialogId: number
+export interface CreateDialog {
+	dialog: {
+		id: number
+		dialogName: number
+		friendId: number
+		userId: number
+	}
+	user: IUser
 }
 
 export interface IDialog {
 	id: number
-	friendId: number
+	dialogName: number
 	userId: number
+	friendId: number
 	user: IUser
 }
 
@@ -36,15 +34,12 @@ export const chatApi = createApi({
 		},
 	}),
 	endpoints: builder => ({
-		createDialog: builder.mutation<IDialog, number>({
+		createDialog: builder.mutation<CreateDialog, number>({
 			query: (friendId: number) => ({
 				url: '/create',
 				method: 'POST',
-				body: friendId,
+				body: { friendId },
 			}),
-		}),
-		getHistory: builder.query<IMessage[], number>({
-			query: (dialogId: number) => `/id?id=${dialogId}`,
 		}),
 		getDialogs: builder.query<IDialog[], void>({
 			query: () => `/`,
@@ -52,8 +47,4 @@ export const chatApi = createApi({
 	}),
 })
 
-export const {
-	useCreateDialogMutation,
-	useGetDialogsQuery,
-	useLazyGetHistoryQuery,
-} = chatApi
+export const { useCreateDialogMutation, useGetDialogsQuery } = chatApi
