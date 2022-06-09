@@ -1,3 +1,4 @@
+import { chatApi } from './services/ChatService'
 import { friendApi } from './services/FriendService'
 import { authApi } from './services/AuthService'
 import { userApi } from './services/UserService'
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,
 	[postApi.reducerPath]: postApi.reducer,
 	[friendApi.reducerPath]: friendApi.reducer,
+	[chatApi.reducerPath]: chatApi.reducer,
 })
 
 export const setupStore = () => {
@@ -26,7 +28,8 @@ export const setupStore = () => {
 				.concat(userApi.middleware)
 				.concat(authApi.middleware)
 				.concat(postApi.middleware)
-				.concat(friendApi.middleware),
+				.concat(friendApi.middleware)
+				.concat(chatApi.middleware),
 	})
 }
 

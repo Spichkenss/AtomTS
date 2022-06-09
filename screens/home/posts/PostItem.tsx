@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useLayoutEffect } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '../../../hooks/useTheme'
 import { IPost } from '../../../store/models/IPost'
 import { ThemeType } from '../../../store/models/ITheme'
-import CircleAvatar from '../../ui/CircleAvatar'
+import CircleAvatar, { unknown } from '../../ui/CircleAvatar'
 import { Palette } from '../../ui/Palette'
 import moment from 'moment'
 import 'moment/locale/ru'
@@ -16,8 +16,8 @@ import {
 import PostLikeButton from '../../ui/PostLikeButton'
 import PostModal from '../../ui/PostModal'
 import { useAuth } from '../../../hooks/useAuth'
-import { AppStackProps } from '../../../navigation/StackNavigator'
 import { useLazyGetCommentsQuery } from '../../../store/services/PostService'
+import { staticURL } from '../../../config'
 
 export interface IPostItem {
 	postData: IPost
@@ -42,13 +42,27 @@ const PostItem: FC<IPostItem> = ({ postData }) => {
 		<View style={styles(theme).container}>
 			<View style={styles(theme).author}>
 				<View style={{ flex: 1, alignItems: 'center', flexDirection: 'row' }}>
-					<CircleAvatar height={40} width={40} image={'../avatar.jpg'} />
+					<CircleAvatar
+						height={40}
+						width={40}
+						image={postData.user.avatar}
+						id={postData.user.id as number}
+						onPress={() => {
+							user?.id === postData.user.id
+								? navigation.navigate('Profile')
+								: navigation.navigate('FriendProfile', {
+										userId: postData.user.id,
+								  })
+						}}
+					/>
 					<TouchableOpacity
 						activeOpacity={0.6}
 						onPress={() => navigation.navigate('Profile')}
 					>
 						<View style={{ flexDirection: 'column', paddingLeft: 10 }}>
-							<Text style={styles(theme).name}>{postData?.user.username}</Text>
+							<Text style={styles(theme).name}>
+								{postData?.user.name} {postData.user.surname}
+							</Text>
 							<Text style={styles(theme).timestamp}>
 								{moment(postData?.createdAt)
 									.add(-30, 'seconds')
@@ -66,7 +80,9 @@ const PostItem: FC<IPostItem> = ({ postData }) => {
 				<Text style={styles(theme).description}>{postData?.description}</Text>
 				{postData?.media && (
 					<Image
-						source={require('../../../avatar.jpg')}
+						source={{
+							uri: staticURL + postData.media,
+						}}
 						style={styles(theme).media}
 					/>
 				)}
@@ -120,7 +136,7 @@ const styles = (theme: ThemeType) =>
 		media: {
 			width: '100%',
 			height: undefined,
-			aspectRatio: 1,
+			aspectRatio: 4 / 3,
 			resizeMode: 'center',
 		},
 		buttons: {

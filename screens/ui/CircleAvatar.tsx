@@ -1,25 +1,45 @@
-import { FC } from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+export const unknown = require('../../assets/unknown.png')
+import { FC, useEffect } from 'react'
+import { Image, Pressable, StyleSheet } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from './Palette'
+import {
+	NavigationProp,
+	ParamListBase,
+	useNavigation,
+} from '@react-navigation/native'
+import { staticURL } from '../../config'
 
 interface ICircleAvatar {
+	id?: number
 	width: number
 	height: number
-	image: string
+	image: string | undefined
+	onPress?: () => void
 }
 
 const CircleAvatar: FC<ICircleAvatar> = props => {
+	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	const { theme } = useTheme()
 
+	const onPressAction = () => {
+		props.onPress ? props.onPress() : navigation.navigate('Profile')
+	}
+
 	return (
-		<View style={styles(theme, props).circle}>
+		<Pressable style={styles(theme, props).circle} onPress={onPressAction}>
 			<Image
-				source={require('../../avatar.jpg')}
+				source={
+					props.image
+						? {
+								uri: staticURL + props.image,
+						  }
+						: unknown
+				}
 				style={styles(theme, props).avatar}
 			/>
-		</View>
+		</Pressable>
 	)
 }
 

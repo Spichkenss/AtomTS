@@ -11,9 +11,15 @@ interface IInput {
 	onPress: () => void
 	setValue: React.Dispatch<React.SetStateAction<string>>
 	value: string
+	unfocusOnSubmit: boolean
 }
 
-const MessageInput: FC<IInput> = ({ placeholder, onPress, setValue }) => {
+const MessageInput: FC<IInput> = ({
+	placeholder,
+	onPress,
+	setValue,
+	unfocusOnSubmit,
+}) => {
 	const { theme } = useTheme()
 	const ref = createRef<TextInput>()
 
@@ -32,7 +38,7 @@ const MessageInput: FC<IInput> = ({ placeholder, onPress, setValue }) => {
 				onPress={() => {
 					ref.current?.clear()
 					onPress()
-					ref.current?.blur()
+					unfocusOnSubmit && ref.current?.blur()
 				}}
 			>
 				<Ionicons name='send' size={28} color={Palette[theme].secondary} />

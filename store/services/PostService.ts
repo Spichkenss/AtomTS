@@ -4,6 +4,7 @@ import { RouteProp } from '@react-navigation/native'
 import { IPost } from '../models/IPost'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { RootState } from '../store'
+import { API } from '../../config'
 
 export interface CreatePostRequest {
 	description?: string
@@ -61,7 +62,7 @@ export interface GetCommentsResponse {
 export const postApi = createApi({
 	reducerPath: 'postApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.1.4:5000/api/posts',
+		baseUrl: `${API}/posts`,
 		prepareHeaders: (headers, { getState }) => {
 			const token = (getState() as RootState).userReducer.token
 			if (token) {
@@ -70,6 +71,7 @@ export const postApi = createApi({
 			return headers
 		},
 	}),
+	refetchOnMountOrArgChange: true,
 	tagTypes: ['Post', 'Like', 'Comment'],
 	endpoints: builder => ({
 		getPost: builder.query<IPost, number>({
@@ -148,6 +150,7 @@ export const {
 	useLikePostMutation,
 	useGetAllPostsQuery,
 	useGetUserPostsQuery,
+	useLazyGetUserPostsQuery,
 	useGetLikesQuery,
 	useLazyGetLikesQuery,
 	useDeletePostMutation,

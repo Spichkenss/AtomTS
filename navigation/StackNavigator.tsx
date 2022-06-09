@@ -1,13 +1,17 @@
 import { NavigatorScreenParams, RouteProp } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { Text } from 'react-native'
 import { useTheme } from '../hooks/useTheme'
 import SuggestFull from '../screens/friends/SuggestFull'
 import Comments from '../screens/home/comments/Comments'
 import Notifications from '../screens/home/notifications/Notifications'
 import AddPostPage from '../screens/home/posts/AddPostPage'
+import Dialog from '../screens/messanger/dialog/Dialog'
 import EditProfile from '../screens/profile/EditProfile'
+import FriendProfile from '../screens/profile/FriendProfile'
+import DialogHeader from '../screens/ui/DialogHeader'
 import { Palette } from '../screens/ui/Palette'
-import { IPost } from '../store/models/IPost'
+import { IUser } from '../store/models/IUser'
 import TabNavigator, { RootStackParamList } from './TabNavigator'
 
 export type AppStackProps = {
@@ -17,6 +21,8 @@ export type AppStackProps = {
 	AddPostPage: { description: string; id: number } | undefined
 	Comments: { id: number }
 	SuggestFull: undefined
+	FriendProfile: { userId: number; username: string }
+	Dialog: { user: IUser; dialogId: number }
 }
 
 const Stack = createNativeStackNavigator<AppStackProps>()
@@ -27,7 +33,7 @@ const StackNavigator = () => {
 		<Stack.Navigator
 			initialRouteName='Tab'
 			screenOptions={{
-				animation: 'fade_from_bottom',
+				animation: 'none',
 				headerTintColor: Palette[theme].text,
 				headerTitleStyle: { fontSize: 24 },
 				headerStyle: { backgroundColor: Palette[theme].primary },
@@ -70,6 +76,22 @@ const StackNavigator = () => {
 				options={{
 					title: 'Рекомендации',
 				}}
+			/>
+			<Stack.Screen
+				name='FriendProfile'
+				component={FriendProfile}
+				options={({ route }) => ({
+					title: route.params.username || 'Профиль друга',
+					headerTitleStyle: { fontSize: 28 },
+				})}
+			/>
+			<Stack.Screen
+				name='Dialog'
+				component={Dialog}
+				options={({ route }) => ({
+					headerTitle: '',
+					headerLeft: () => <DialogHeader user={route.params.user} />,
+				})}
 			/>
 		</Stack.Navigator>
 	)

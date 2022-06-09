@@ -1,8 +1,10 @@
+import { userApi } from './../services/UserService'
 import { authApi } from './../services/AuthService'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from './../models/IUser'
 import { RootState } from '../store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { staticURL } from '../../config'
 
 export interface UserState {
 	user: IUser | null
@@ -54,6 +56,14 @@ export const userSlice = createSlice({
 			state.token = null
 			state.user = null
 		})
+		builder.addMatcher(
+			userApi.endpoints.getAvatar.matchFulfilled,
+			(state, { payload }) => {
+				if (state.user) {
+					state.user.avatar = payload
+				}
+			}
+		)
 	},
 })
 

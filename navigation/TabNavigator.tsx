@@ -1,8 +1,4 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Home from '../screens/home/Home'
-import Dialogs from '../screens/dialogs/Dialogs'
-import Friends from '../screens/friends/Friends'
-import Profile from '../screens/profile/Profile'
 import { AntDesign } from '@expo/vector-icons'
 import { Feather } from '@expo/vector-icons'
 import { Palette } from '../screens/ui/Palette'
@@ -11,10 +7,16 @@ import CircleAvatar from '../screens/ui/CircleAvatar'
 import NotificationBell from '../screens/ui/NotificationBell'
 import ProfileEditor from '../screens/ui/ProfileEditor'
 import { useGetRequestsQuery } from '../store/services/FriendService'
+import { useAuth } from '../hooks/useAuth'
+
+import Home from '../screens/home/Home'
+import Profile from '../screens/profile/Profile'
+import Friends from '../screens/friends/Friends'
+import Messanger from '../screens/messanger/Messanger'
 
 export type RootStackParamList = {
 	Home: undefined
-	Dialogs: undefined
+	Messanger: undefined
 	Friends: undefined
 	Profile: undefined
 }
@@ -24,11 +26,11 @@ const Tabbar = createBottomTabNavigator<RootStackParamList>()
 const TabNavigator = () => {
 	const { theme } = useTheme()
 	const { data: requests } = useGetRequestsQuery()
+	const { user } = useAuth()
 	return (
 		<Tabbar.Navigator
 			initialRouteName='Home'
 			screenOptions={{
-				unmountOnBlur: true,
 				headerStyle: {
 					backgroundColor: Palette[theme].primary,
 					elevation: 0,
@@ -51,6 +53,7 @@ const TabNavigator = () => {
 				name='Home'
 				component={Home}
 				options={{
+					unmountOnBlur: true,
 					title: 'Главная',
 					headerRight: () => {
 						return <NotificationBell />
@@ -69,9 +72,10 @@ const TabNavigator = () => {
 				}}
 			/>
 			<Tabbar.Screen
-				name='Dialogs'
-				component={Dialogs}
+				name='Messanger'
+				component={Messanger}
 				options={{
+					unmountOnBlur: true,
 					title: 'Диалоги',
 					tabBarIcon: ({ focused }) => (
 						<Feather
@@ -90,6 +94,7 @@ const TabNavigator = () => {
 				name='Friends'
 				component={Friends}
 				options={{
+					unmountOnBlur: true,
 					tabBarBadge: requests?.count ? requests?.count : undefined,
 					tabBarBadgeStyle: { textAlignVertical: 'center' },
 					title: 'Друзья',
@@ -109,15 +114,21 @@ const TabNavigator = () => {
 			<Tabbar.Screen
 				name='Profile'
 				component={Profile}
-				options={{
+				options={({ route }) => ({
+					headerTitle: user?.username,
 					title: 'Профиль',
 					headerRight: () => {
 						return <ProfileEditor />
 					},
 					tabBarIcon: () => (
-						<CircleAvatar height={21} width={21} image={'../avatar.jpg'} />
+						<CircleAvatar
+							height={21}
+							width={21}
+							image={user?.avatar}
+							id={user?.id as number}
+						/>
 					),
-				}}
+				})}
 			/>
 		</Tabbar.Navigator>
 	)

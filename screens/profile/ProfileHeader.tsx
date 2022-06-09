@@ -1,24 +1,74 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import CircleAvatar from '../ui/CircleAvatar'
 import { Palette } from '../ui/Palette'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import * as ImagePicker from 'expo-image-picker'
+import {
+	useGetAvatarQuery,
+	useSetAvatarMutation,
+} from '../../store/services/UserService'
+import { IUser } from '../../store/models/IUser'
+
+declare global {
+	interface FormDataValue {
+		uri: string
+		type: string
+		name: string
+	}
+
+	interface FormData {
+		append(name: string, value: FormDataValue, fileName?: string): void
+		set(name: string, value: FormDataValue, fileName?: string): void
+	}
+}
 
 interface Props {
 	children?: React.ReactNode
+	user: IUser | null | undefined
+	changeable: boolean
 }
 
-const ProfileHeader: FC<Props> = ({ children }) => {
-	const { user } = useAuth()
+const ProfileHeader: FC<Props> = ({ children, user, changeable }) => {
 	const { theme } = useTheme()
 	const [isStatusFull, setIsStatusFull] = useState<boolean>(false)
+	const [setAvatar] = useSetAvatarMutation()
+	const { data: avatar } = useGetAvatarQuery(user?.id as number)
+
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		})
+
+		if (!result.cancelled) {
+			const formData = new FormData()
+			formData.append('avatar', {
+				uri: result.uri,
+				type: 'image/png',
+				name: `${user?.username}-avatar.png`,
+			})
+
+			await setAvatar(formData)
+		}
+	}
 
 	return (
 		<View style={styles(theme).container}>
 			<View style={styles(theme).header}>
-				<CircleAvatar height={90} width={90} image={'../../avatar.jpg'} />
+				<CircleAvatar
+					id={user?.id as number}
+					height={90}
+					width={90}
+					image={avatar}
+					onPress={() => {
+						changeable && pickImage()
+					}}
+				/>
 				<View
 					style={{
 						flexDirection: 'column',

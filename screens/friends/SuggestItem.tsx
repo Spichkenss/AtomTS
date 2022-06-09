@@ -1,9 +1,15 @@
+import {
+	NavigationProp,
+	ParamListBase,
+	useNavigation,
+} from '@react-navigation/native'
 import { FC } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import { IUser } from '../../store/models/IUser'
 import AddUserButton from '../ui/AddUserButton'
+import { unknown } from '../ui/CircleAvatar'
 import { Palette } from '../ui/Palette'
 
 interface ISuggestItem {
@@ -12,12 +18,21 @@ interface ISuggestItem {
 
 const SuggestItem: FC<ISuggestItem> = ({ data }) => {
 	const { theme } = useTheme()
+	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 
 	return (
 		<View style={styles(theme).container}>
-			<View style={styles(theme).user}>
+			<Pressable
+				style={styles(theme).user}
+				onPress={() =>
+					navigation.navigate('FriendProfile', {
+						userId: data.id,
+						username: data.username,
+					})
+				}
+			>
 				<Image
-					source={require('../../avatar.jpg')}
+					source={data.avatar ? { uri: data.avatar } : unknown}
 					style={styles(theme).avatar}
 				/>
 				<View style={styles(theme).besideAvatar}>
@@ -26,7 +41,7 @@ const SuggestItem: FC<ISuggestItem> = ({ data }) => {
 					</Text>
 					<AddUserButton id={data.id as number} />
 				</View>
-			</View>
+			</Pressable>
 		</View>
 	)
 }

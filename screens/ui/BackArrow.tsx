@@ -12,8 +12,11 @@ const BackArrow = () => {
 	const { theme } = useTheme()
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	return (
-		<TouchableOpacity onPress={() => navigation.goBack()}>
-			<Ionicons name='arrow-back' size={24} color={Palette[theme].iconActive} />
+		<TouchableOpacity
+			onPress={() => navigation.goBack()}
+			style={{ paddingRight: 10 }}
+		>
+			<Ionicons name='arrow-back' size={28} color={Palette[theme].iconActive} />
 		</TouchableOpacity>
 	)
 }

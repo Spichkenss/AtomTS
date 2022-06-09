@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useGetUserPostsQuery } from '../../store/services/PostService'
 import { useAuth } from '../../hooks/useAuth'
 import { IPost } from '../../store/models/IPost'
@@ -17,25 +17,29 @@ const Profile = () => {
 	const { theme } = useTheme()
 	const {
 		data: posts,
-		isLoading,
+		isFetching,
 		refetch,
 	} = useGetUserPostsQuery(user?.id as number)
 
-	return isLoading ? (
+	useEffect(() => {
+		refetch()
+	}, [user])
+
+	return isFetching ? (
 		<Loader />
 	) : (
 		<FlatList
 			style={styles(theme).container}
-			refreshing={isLoading}
+			refreshing={isFetching}
 			onRefresh={refetch}
 			data={posts}
 			keyExtractor={(item: IPost) => item.id.toString()}
 			renderItem={({ item }) => <PostItem postData={item} />}
 			ItemSeparatorComponent={() => <View style={{ margin: 2.5 }}></View>}
 			ListHeaderComponent={
-				<ProfileHeader>
+				<ProfileHeader user={user} changeable={true}>
 					<MyButtons />
-					<FriendList />
+					<FriendList id={user?.id as number} />
 					{posts?.length != 0 && (
 						<View
 							style={{

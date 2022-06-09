@@ -15,7 +15,12 @@ const CommentItem: FC<CommentItem> = ({ commentData }) => {
 	const { theme } = useTheme()
 	return (
 		<View style={styles(theme).container}>
-			<CircleAvatar width={40} height={40} image={'../../../avatar.jpg'} />
+			<CircleAvatar
+				width={40}
+				height={40}
+				image={commentData.user.avatar}
+				id={commentData.user.id as number}
+			/>
 			<View style={styles(theme).author}>
 				<Text style={styles(theme).username}>{commentData.user.username}</Text>
 				<Text style={styles(theme).body}>{commentData.body}</Text>

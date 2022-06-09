@@ -1,5 +1,15 @@
+const unknown = require('../../../assets/unknown.png')
+import {
+	CommonActions,
+	NavigationProp,
+	ParamListBase,
+	useNavigation,
+	useRoute,
+} from '@react-navigation/native'
 import { FC } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text } from 'react-native'
+import { staticURL } from '../../../config'
+import { useAuth } from '../../../hooks/useAuth'
 import { useTheme } from '../../../hooks/useTheme'
 import { ThemeType } from '../../../store/models/ITheme'
 import { RelationType } from '../../../store/services/FriendService'
@@ -10,16 +20,36 @@ interface Props {
 }
 
 const FriendItem: FC<Props> = ({ data }) => {
+	const { user } = useAuth()
+	const route = useRoute()
+	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	const { theme } = useTheme()
+
 	return (
-		<View style={styles(theme).item}>
+		<Pressable
+			style={styles(theme).item}
+			onPress={() =>
+				navigation.dispatch(
+					data.user.id !== user?.id
+						? CommonActions.navigate({
+								name: 'FriendProfile',
+								params: { userId: data.user.id },
+						  })
+						: CommonActions.navigate({
+								name: 'Profile',
+						  })
+				)
+			}
+		>
 			<Image
-				source={require('../../../avatar.jpg')}
+				source={
+					data.user.avatar ? { uri: staticURL + data.user.avatar } : unknown
+				}
 				style={styles(theme).avatar}
 			/>
 			<Text style={styles(theme).text}>{data.user.name}</Text>
 			<Text style={styles(theme).text}>{data.user.surname}</Text>
-		</View>
+		</Pressable>
 	)
 }
 

@@ -62,6 +62,7 @@ const Comments: FC<Props> = ({ route }) => {
 				}
 			/>
 			<MessageInput
+				unfocusOnSubmit={true}
 				value={comment}
 				setValue={setComment}
 				placeholder={'Комментарий'}

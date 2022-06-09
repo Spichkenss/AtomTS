@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
+import { API } from '../../config'
 import { IUser } from '../models/IUser'
 import { RootState } from '../store'
 
@@ -40,7 +41,7 @@ export interface GetRelation {
 export const friendApi = createApi({
 	reducerPath: 'friendApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.1.4:5000/api/friends',
+		baseUrl: `${API}/friends`,
 		prepareHeaders: (headers, { getState }) => {
 			const token = (getState() as RootState).userReducer.token
 			if (token) {
@@ -49,7 +50,6 @@ export const friendApi = createApi({
 			return headers
 		},
 	}),
-	refetchOnFocus: true,
 	tagTypes: ['Friend', 'Suggest', 'Relation', 'Request'],
 	endpoints: builder => ({
 		getRelation: builder.query<GetRelation, number>({
@@ -94,32 +94,15 @@ export const friendApi = createApi({
 		}),
 		sendRequest: builder.mutation<SendRequset, number>({
 			query: (id: number) => ({ url: `/id/request?id=${id}`, method: 'POST' }),
-			invalidatesTags: result => [
-				// { type: 'Friend', id: result?.friend_id },
-				// { type: 'Request', id: result?.friend_id },
-				'Friend',
-				'Request',
-				'Suggest',
-			],
+			invalidatesTags: result => ['Relation', 'Friend', 'Request', 'Suggest'],
 		}),
 		acceptRequest: builder.mutation<AcceptRequset, number>({
 			query: (id: number) => ({ url: `/id/accept?id=${id}`, method: 'POST' }),
-			invalidatesTags: result => [
-				// { type: 'Friend', id: result?.friend_id },
-				// { type: 'Request', id: result?.friend_id },
-				'Friend',
-				'Request',
-				'Suggest',
-			],
+			invalidatesTags: result => ['Relation', 'Friend', 'Request', 'Suggest'],
 		}),
 		deleteFriend: builder.mutation<DeleteRequset, number>({
 			query: (id: number) => ({ url: `/id/delete?id=${id}`, method: 'POST' }),
-			invalidatesTags: result => [
-				// { type: 'Friend', id: result?.friend_id },
-				'Friend',
-				'Request',
-				'Suggest',
-			],
+			invalidatesTags: result => ['Relation', 'Friend', 'Request', 'Suggest'],
 		}),
 	}),
 })

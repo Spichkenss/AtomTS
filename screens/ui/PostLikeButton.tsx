@@ -3,10 +3,9 @@ import { useTheme } from '../../hooks/useTheme'
 import { Feather } from '@expo/vector-icons'
 import { ThemeType } from '../../store/models/ITheme'
 import { Palette } from './Palette'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useLayoutEffect } from 'react'
 import {
 	PostLikesResponse,
-	useGetLikesQuery,
 	useLazyGetLikesQuery,
 	useLikePostMutation,
 } from '../../store/services/PostService'
@@ -17,7 +16,7 @@ const PostLikeButton: FC<IPostItem> = ({ postData }) => {
 	const [getLikes, { data: post }] = useLazyGetLikesQuery()
 	const [likePost, { data, isSuccess }] = useLikePostMutation()
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const fetchLikes = async (id: number) => {
 			await getLikes(id)
 		}

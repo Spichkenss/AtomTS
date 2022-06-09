@@ -6,4 +6,5 @@ export interface IUser {
 	email: string
 	lastSeen: boolean
 	status: string
+	avatar: string | undefined
 }

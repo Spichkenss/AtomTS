@@ -10,6 +10,7 @@ import { ThemeType } from '../../../store/models/ITheme'
 import { Palette } from '../../ui/Palette'
 import moment from 'moment'
 import CircleAvatar from '../../ui/CircleAvatar'
+import { staticURL } from '../../../config'
 
 interface ICommentPost {
 	id: number
@@ -25,7 +26,12 @@ const CommentsPost: FC<ICommentPost> = ({ id }) => {
 			</PageTitle>
 			<View style={styles(theme).post}>
 				<View style={styles(theme).author}>
-					<CircleAvatar height={50} width={50} image={'../../avatar.jpg'} />
+					<CircleAvatar
+						height={50}
+						width={50}
+						image={data?.user.avatar}
+						id={id as number}
+					/>
 					<View style={{ flexDirection: 'column', paddingLeft: 10 }}>
 						<Text style={styles(theme).username}>{data?.user.username}</Text>
 						<Text style={styles(theme).timestamp}>
@@ -37,9 +43,9 @@ const CommentsPost: FC<ICommentPost> = ({ id }) => {
 					</View>
 				</View>
 				<Text style={styles(theme).description}>{data?.description}</Text>
-				{!data?.media && (
+				{data?.media && (
 					<Image
-						source={require('../../../avatar.jpg')}
+						source={{ uri: staticURL + data?.media }}
 						style={styles(theme).media}
 					/>
 				)}

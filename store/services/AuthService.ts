@@ -1,6 +1,7 @@
 import { IUser } from './../models/IUser'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { API } from '../../config'
 
 export interface UserResponse {
 	user: IUser
@@ -21,7 +22,7 @@ export interface RegistrationRequest {
 export const authApi = createApi({
 	reducerPath: 'authApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://192.168.1.4:5000/api/auth',
+		baseUrl: `${API}/auth`,
 		prepareHeaders: async headers => {
 			const token = await AsyncStorage.getItem('token')
 			if (token) {

@@ -1,25 +1,13 @@
-import {
-	NavigationProp,
-	ParamListBase,
-	useFocusEffect,
-	useNavigation,
-} from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { FlatList } from 'react-native'
-import { RootStackParamList } from '../../navigation/TabNavigator'
-import {
-	GetFriends,
-	RelationType,
-	useGetRequestsQuery,
-} from '../../store/services/FriendService'
+import { GetFriends, RelationType } from '../../store/services/FriendService'
 import Header from './Header'
 import RequestItem from './RequestItem'
 
 const Requests: FC<{
 	isFetching: boolean
 	requests: GetFriends | undefined
-}> = ({ isFetching, requests }) => {
+}> = ({ requests }) => {
 	return (
 		<FlatList
 			data={requests?.rows}

@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react'
 import {
 	RelationType,
 	useGetFriendsQuery,
@@ -9,11 +9,13 @@ import FriendItem from './FriendItem'
 import { useTheme } from '../../../hooks/useTheme'
 import { ThemeType } from '../../../store/models/ITheme'
 import { Palette } from '../../ui/Palette'
-import Separator from '../../ui/Separator'
 
-const FriendList = () => {
-	const { user } = useAuth()
-	const { data: friends } = useGetFriendsQuery(user?.id as number)
+interface Props {
+	id: number
+}
+
+const FriendList: FC<Props> = ({ id }) => {
+	const { data: friends } = useGetFriendsQuery(id)
 	const { theme } = useTheme()
 
 	return (
@@ -21,7 +23,7 @@ const FriendList = () => {
 			<Text
 				style={{ paddingBottom: 10, fontSize: 16, color: Palette[theme].text }}
 			>
-				Мои друзья {friends?.count}
+				Друзья {friends?.count}
 			</Text>
 			<FlatList
 				horizontal={true}

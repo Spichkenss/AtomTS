@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+	Image,
+	Pressable,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {
 	StatusType,
@@ -17,6 +24,7 @@ import {
 	useNavigation,
 } from '@react-navigation/native'
 import AddUserButton from '../ui/AddUserButton'
+import { unknown } from '../ui/CircleAvatar'
 
 const SuggestPart = () => {
 	const navigation = useNavigation<NavigationProp<ParamListBase>>()
@@ -38,9 +46,17 @@ const SuggestPart = () => {
 					<Text style={styles(theme).showAll}>Показать всех</Text>
 				</TouchableOpacity>
 			</View>
-			<View style={styles(theme).user}>
+			<Pressable
+				style={styles(theme).user}
+				onPress={() =>
+					navigation.navigate('FriendProfile', {
+						userId: randomUser?.id,
+						username: randomUser?.username,
+					})
+				}
+			>
 				<Image
-					source={require('../../avatar.jpg')}
+					source={randomUser?.avatar ? { uri: randomUser.avatar } : unknown}
 					style={styles(theme).avatar}
 				/>
 				<View style={styles(theme).besideAvatar}>
@@ -50,7 +66,7 @@ const SuggestPart = () => {
 
 					<AddUserButton id={randomUser?.id as number} />
 				</View>
-			</View>
+			</Pressable>
 			<Separator />
 		</View>
 	) : null

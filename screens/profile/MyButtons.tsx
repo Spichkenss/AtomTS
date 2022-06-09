@@ -3,7 +3,6 @@ import { FontAwesome } from '@expo/vector-icons'
 import { useTheme } from '../../hooks/useTheme'
 import { Palette } from '../ui/Palette'
 import { ThemeType } from '../../store/models/ITheme'
-import Separator from '../ui/Separator'
 import { Feather } from '@expo/vector-icons'
 import {
 	NavigationProp,

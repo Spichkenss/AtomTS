@@ -1,8 +1,14 @@
+import {
+	NavigationProp,
+	ParamListBase,
+	useNavigation,
+} from '@react-navigation/native'
 import { FC } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { ThemeType } from '../../store/models/ITheme'
 import { RelationType } from '../../store/services/FriendService'
+import { unknown } from '../ui/CircleAvatar'
 import ManageFriendButton from '../ui/ManageFriendButton'
 import { Palette } from '../ui/Palette'
 
@@ -11,12 +17,21 @@ interface IRequestItem {
 }
 
 const RequestItem: FC<IRequestItem> = ({ data }) => {
+	const navigation = useNavigation<NavigationProp<ParamListBase>>()
 	const { theme } = useTheme()
 	return (
 		<View style={styles(theme).container}>
-			<View style={styles(theme).user}>
+			<Pressable
+				style={styles(theme).user}
+				onPress={() =>
+					navigation.navigate('FriendProfile', {
+						userId: data.user.id,
+						username: data.user.username,
+					})
+				}
+			>
 				<Image
-					source={require('../../avatar.jpg')}
+					source={data.user.avatar ? { uri: data.user.avatar } : unknown}
 					style={styles(theme).avatar}
 				/>
 				<View style={{ paddingHorizontal: 10 }}>
@@ -25,7 +40,7 @@ const RequestItem: FC<IRequestItem> = ({ data }) => {
 					</Text>
 					<Text style={{ color: Palette[theme].iconInactive }}>Онлайн</Text>
 				</View>
-			</View>
+			</Pressable>
 
 			<ManageFriendButton id={data.user.id} status={data.status} />
 		</View>
