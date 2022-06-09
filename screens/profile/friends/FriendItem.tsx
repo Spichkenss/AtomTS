@@ -33,7 +33,7 @@ const FriendItem: FC<Props> = ({ data }) => {
 					data.user.id !== user?.id
 						? CommonActions.navigate({
 								name: 'FriendProfile',
-								params: { userId: data.user.id },
+								params: { userId: data.user.id, username: data.user.username },
 						  })
 						: CommonActions.navigate({
 								name: 'Profile',

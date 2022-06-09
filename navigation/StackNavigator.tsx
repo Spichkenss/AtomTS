@@ -81,7 +81,7 @@ const StackNavigator = () => {
 				name='FriendProfile'
 				component={FriendProfile}
 				options={({ route }) => ({
-					title: route.params.username || 'Профиль друга',
+					title: route.params.username,
 					headerTitleStyle: { fontSize: 28 },
 				})}
 			/>
